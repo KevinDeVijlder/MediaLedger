@@ -1,40 +1,20 @@
-import { useEffect, useState } from "react";
-import { Container, Typography, Box, Paper, CircularProgress } from "@mui/material";
-import { apiGet } from "./api/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+import AddItem from "./components/AddItem";
+import AddCollection from "./components/AddCollection";
+import Settings from "./components/Settings";
+import Navigation from "./components/Navigation";
 
-function App() {
-  const [backendMessage, setBackendMessage] = useState(null);
-
-  useEffect(() => {
-    apiGet("/")
-      .then((data) => {
-        setBackendMessage(data.message);
-      })
-      .catch((err) => {
-        setBackendMessage("Error connecting to backend");
-        console.error(err);
-      });
-  }, []);
-
+export default function App() {
   return (
-    <Container maxWidth="md">
-      <Box sx={{ mt: 4 }}>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="h4" gutterBottom>
-            MediaLedger
-          </Typography>
-
-          {!backendMessage ? (
-            <CircularProgress />
-          ) : (
-            <Typography variant="body1" sx={{ mt: 2 }}>
-              Backend says: {backendMessage}
-            </Typography>
-          )}
-        </Paper>
-      </Box>
-    </Container>
+    <>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/add-item" element={<AddItem />} />
+        <Route path="/add-collection" element={<AddCollection />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </>
   );
 }
-
-export default App;

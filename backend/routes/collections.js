@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const { name, description = "" } = req.body;
-    if (!name || name.trim() === "") {
+    if (!name?.trim()) {
       return res.status(400).json({ error: "Name is required" });
     }
 
@@ -53,18 +53,7 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-// DELETE collection
-router.delete("/:id", async (req, res) => {
-  try {
-    await db.runAsync("DELETE FROM collections WHERE id = ?", [req.params.id]);
-    res.json({ message: "Collection deleted" });
-  } catch (err) {
-    console.error("Failed to delete collection:", err);
-    res.status(500).json({ error: "Failed to delete collection" });
-  }
-});
-
-// GET single collection with its items
+// GET single collection with full items info
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -74,15 +63,40 @@ router.get("/:id", async (req, res) => {
     );
     if (!collection) return res.status(404).json({ error: "Collection not found" });
 
-    // Get items in this collection
+    // Get items in this collection with platform, media type
     const items = await db.allAsync(
-      `SELECT i.* FROM items i
+      `SELECT i.*, p.name AS platform_name, m.name AS media_type_name
+       FROM items i
+       LEFT JOIN platforms p ON i.platform_id = p.id
+       LEFT JOIN media_types m ON i.media_type_id = m.id
        INNER JOIN item_collections ic ON i.id = ic.item_id
        WHERE ic.collection_id = ?`,
       [id]
     );
 
-    res.json({ ...collection, items });
+    // Fetch tags and collections for each item
+    const itemsWithRelations = [];
+    for (const item of items) {
+      const tags = await db.allAsync(
+        `SELECT t.id, t.name
+         FROM tags t
+         INNER JOIN item_tags it ON it.tag_id = t.id
+         WHERE it.item_id = ?`,
+        [item.id]
+      );
+
+      const collections = await db.allAsync(
+        `SELECT c.id, c.name
+         FROM collections c
+         INNER JOIN item_collections ic ON ic.collection_id = c.id
+         WHERE ic.item_id = ?`,
+        [item.id]
+      );
+
+      itemsWithRelations.push({ ...item, tags, collections });
+    }
+
+    res.json({ ...collection, items: itemsWithRelations });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch collection" });
@@ -96,7 +110,6 @@ router.put("/:id", upload.single("image"), async (req, res) => {
 
   try {
     const cover_url = req.file ? req.file.path.replace(/\\/g, "/") : null;
-
     const fields = ["name = ?", "description = ?"];
     const params = [name, description];
 
@@ -108,7 +121,6 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     params.push(id);
 
     await db.runAsync(`UPDATE collections SET ${fields.join(", ")} WHERE id = ?`, params);
-
     res.json({ message: "Collection updated" });
   } catch (err) {
     console.error(err);
@@ -116,18 +128,23 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   }
 });
 
-// DELETE collection and remove item links
+// DELETE collection and remove its items links + image
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    const collection = await db.getAsync("SELECT * FROM collections WHERE id = ?", [id]);
+    if (collection?.cover_url && fs.existsSync(collection.cover_url)) {
+      fs.unlinkSync(collection.cover_url);
+    }
+
     await db.runAsync("DELETE FROM item_collections WHERE collection_id = ?", [id]);
     await db.runAsync("DELETE FROM collections WHERE id = ?", [id]);
+
     res.json({ message: "Collection deleted" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to delete collection" });
   }
 });
-
 
 export default router;

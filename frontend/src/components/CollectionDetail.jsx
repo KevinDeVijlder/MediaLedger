@@ -120,10 +120,25 @@ export default function CollectionDetail() {
           rows={2}
           sx={{ mb: 2 }}
         />
-        <Button component="label" variant="outlined" sx={{ mb: 2 }}>
-          Replace Image
-          <input type="file" hidden onChange={e => setImageFile(e.target.files[0])} />
-        </Button>
+      {/* Image Upload */}
+        <Box sx={{ mb: 3 }}>
+          <Button variant="contained" component="label">
+            Upload Cover Image
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setImageFile(e.target.files[0]);
+                }
+              }}
+            />
+          </Button>
+          {imageFile && (
+            <Typography sx={{ mt: 1 }}>Selected file: {imageFile.name}</Typography>
+          )}
+        </Box>
         <Button type="submit" variant="contained" fullWidth sx={{ mb: 2 }}>
           Save Changes
         </Button>

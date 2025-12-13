@@ -190,16 +190,29 @@ export default function AddItem() {
           </Select>
         </FormControl>
 
-        {/* Image */}
-        <Button variant="contained" component="label" sx={{ mb: 3 }}>
-          Upload Image
-          <input
-            type="file"
-            hidden
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0])}
-          />
-        </Button>
+        {/* Image Upload */}
+        <Box sx={{ mb: 3 }}>
+          <Button variant="contained" component="label">
+            Upload Image
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setImageFile(e.target.files[0]);
+                }
+              }}
+            />
+          </Button>
+
+          {imageFile && (
+            <Typography sx={{ mt: 1 }}>
+              Selected file: {imageFile.name}
+            </Typography>
+          )}
+        </Box>
+
 
         {/* Submit */}
         <Button type="submit" variant="contained" fullWidth>

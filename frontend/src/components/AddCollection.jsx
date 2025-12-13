@@ -6,7 +6,7 @@ import { useApp } from "../AppContext";
 export default function AddCollection() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState(null);
 
   const { triggerRefresh, notifySuccess } = useApp(); // ✅ Correct usage
@@ -26,7 +26,7 @@ export default function AddCollection() {
       const formData = new FormData();
       formData.append("name", name.trim());
       formData.append("description", description);
-      if (image) formData.append("image", image);
+      if (imageFile) formData.append("image", imageFile);
 
       const res = await fetch(`${API}/collections`, {
         method: "POST",
@@ -74,12 +74,25 @@ export default function AddCollection() {
           rows={2}
           sx={{ mb: 2 }}
         />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-          style={{ marginBottom: "16px" }}
-        />
+        {/* Image Upload */}
+        <Box sx={{ mb: 3 }}>
+          <Button variant="contained" component="label">
+            Upload Cover Image
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setImageFile(e.target.files[0]);
+                }
+              }}
+            />
+          </Button>
+          {imageFile && (
+            <Typography sx={{ mt: 1 }}>Selected file: {imageFile.name}</Typography>
+          )}
+        </Box>
         <Button variant="contained" type="submit" fullWidth>
           Add Collection
         </Button>

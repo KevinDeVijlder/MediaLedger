@@ -109,24 +109,36 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   const { name, description = "" } = req.body;
 
   try {
-    const cover_url = req.file ? req.file.path.replace(/\\/g, "/") : null;
-    const fields = ["name = ?", "description = ?"];
-    const params = [name, description];
+    // 🔹 Fetch existing collection
+    const existing = await db.getAsync("SELECT cover_url FROM collections WHERE id = ?", [id]);
+    if (!existing) return res.status(404).json({ error: "Collection not found" });
 
-    if (cover_url) {
-      fields.push("cover_url = ?");
-      params.push(cover_url);
+    let cover_url = existing.cover_url;
+
+    // 🔄 Replace image if new one uploaded
+    if (req.file) {
+      // delete old image
+      if (cover_url && fs.existsSync(cover_url)) {
+        fs.unlinkSync(cover_url);
+      }
+      cover_url = req.file.path.replace(/\\/g, "/");
     }
 
-    params.push(id);
+    // 🔹 Update collection
+    await db.runAsync(
+      `UPDATE collections
+       SET name = ?, description = ?, cover_url = ?
+       WHERE id = ?`,
+      [name, description, cover_url, id]
+    );
 
-    await db.runAsync(`UPDATE collections SET ${fields.join(", ")} WHERE id = ?`, params);
     res.json({ message: "Collection updated" });
   } catch (err) {
-    console.error(err);
+    console.error("Update collection failed:", err);
     res.status(500).json({ error: "Failed to update collection" });
   }
 });
+
 
 // DELETE collection and remove its items links + image
 router.delete("/:id", async (req, res) => {

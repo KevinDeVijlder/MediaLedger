@@ -140,4 +140,4 @@ vite.config.ts.timestamp-*
 
 # Uploaded images
 /backend/uploads/items/*
-backend/uploads/collections/*
+/backend/uploads/collections/*

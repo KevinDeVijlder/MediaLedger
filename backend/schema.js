@@ -2,19 +2,17 @@ import db from "./db.js";
 
 export function initializeDatabase() {
   db.serialize(() => {
-    // ----------- Collections Table -----------
+    // Collections
     db.run(`
       CREATE TABLE IF NOT EXISTS collections (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
         description TEXT,
-        cover_url TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        cover_url TEXT
       );
     `);
 
-    // ----------- Platforms Table -----------
+    // Platforms
     db.run(`
       CREATE TABLE IF NOT EXISTS platforms (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,7 +20,7 @@ export function initializeDatabase() {
       );
     `);
 
-    // ----------- Media Types Table -----------
+    // Media Types
     db.run(`
       CREATE TABLE IF NOT EXISTS media_types (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +28,7 @@ export function initializeDatabase() {
       );
     `);
 
-    // ----------- Tags Table -----------
+    // Tags
     db.run(`
       CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,21 +36,21 @@ export function initializeDatabase() {
       );
     `);
 
-    // ----------- Items Table -----------
+    // Items
     db.run(`
       CREATE TABLE IF NOT EXISTS items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         type TEXT CHECK(type IN ('movie','tvshow','game')) NOT NULL,
+        platform_id INTEGER,
+        media_type_id INTEGER,
         cover_url TEXT,
-        release_year INTEGER,
-        ownership TEXT, -- JSON array: [{format, platform_id}]
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        FOREIGN KEY(platform_id) REFERENCES platforms(id),
+        FOREIGN KEY(media_type_id) REFERENCES media_types(id)
       );
     `);
 
-    // ----------- Item_ Collections Table (many-to-many) -----------
+    // Item <-> Collections
     db.run(`
       CREATE TABLE IF NOT EXISTS item_collections (
         item_id INTEGER NOT NULL,
@@ -63,7 +61,7 @@ export function initializeDatabase() {
       );
     `);
 
-    // ----------- Item_Tags Table (many-to-many) -----------
+    // Item <-> Tags
     db.run(`
       CREATE TABLE IF NOT EXISTS item_tags (
         item_id INTEGER NOT NULL,
@@ -73,8 +71,7 @@ export function initializeDatabase() {
         FOREIGN KEY(tag_id) REFERENCES tags(id)
       );
     `);
-
   });
 
-  console.log("Database initialized with updated schema.");
+  console.log("Database initialized with cleaned schema.");
 }

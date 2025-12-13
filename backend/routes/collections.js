@@ -64,4 +64,70 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// GET single collection with its items
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const collection = await db.getAsync(
+      "SELECT * FROM collections WHERE id = ?",
+      [id]
+    );
+    if (!collection) return res.status(404).json({ error: "Collection not found" });
+
+    // Get items in this collection
+    const items = await db.allAsync(
+      `SELECT i.* FROM items i
+       INNER JOIN item_collections ic ON i.id = ic.item_id
+       WHERE ic.collection_id = ?`,
+      [id]
+    );
+
+    res.json({ ...collection, items });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch collection" });
+  }
+});
+
+// PUT update collection
+router.put("/:id", upload.single("image"), async (req, res) => {
+  const { id } = req.params;
+  const { name, description = "" } = req.body;
+
+  try {
+    const cover_url = req.file ? req.file.path.replace(/\\/g, "/") : null;
+
+    const fields = ["name = ?", "description = ?"];
+    const params = [name, description];
+
+    if (cover_url) {
+      fields.push("cover_url = ?");
+      params.push(cover_url);
+    }
+
+    params.push(id);
+
+    await db.runAsync(`UPDATE collections SET ${fields.join(", ")} WHERE id = ?`, params);
+
+    res.json({ message: "Collection updated" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update collection" });
+  }
+});
+
+// DELETE collection and remove item links
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.runAsync("DELETE FROM item_collections WHERE collection_id = ?", [id]);
+    await db.runAsync("DELETE FROM collections WHERE id = ?", [id]);
+    res.json({ message: "Collection deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete collection" });
+  }
+});
+
+
 export default router;

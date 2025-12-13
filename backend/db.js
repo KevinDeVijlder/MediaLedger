@@ -23,4 +23,15 @@ db.runAsync = function (sql, params = []) {
   });
 };
 
+// Promisief db.get
+db.getAsync = function (sql, params = []) {
+  return new Promise((resolve, reject) => {
+    this.get(sql, params, (err, row) => {
+      if (err) reject(err);
+      else resolve(row);
+    });
+  });
+};
+
+
 export default db;

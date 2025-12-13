@@ -11,13 +11,15 @@ import {
   ToggleButtonGroup,
   Alert,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../AppContext";
 
 export default function Dashboard() {
   const API = "http://localhost:3001";
+  const navigate = useNavigate();
 
   // 🔹 Global app context
- const { refreshToken, successMessage, clearSuccess } = useApp();
+  const { refreshToken, successMessage, clearSuccess } = useApp();
 
   // 🔹 Toggles (persisted)
   const [showItems, setShowItems] = useState(
@@ -40,7 +42,7 @@ export default function Dashboard() {
     localStorage.setItem("showCollections", JSON.stringify(showCollections));
   }, [showCollections]);
 
-  // 🔄 Fetch data (runs on refreshKey change)
+  // 🔄 Fetch data (runs on refreshToken change)
   useEffect(() => {
     fetch(`${API}/items`)
       .then((res) => res.json())
@@ -51,7 +53,7 @@ export default function Dashboard() {
       .then((res) => res.json())
       .then((data) => setCollections(Array.isArray(data) ? data : []))
       .catch(() => setCollections([]));
- }, [refreshToken]);
+  }, [refreshToken]);
 
   const renderGrid = (list) => {
     if (!list || list.length === 0) {
@@ -69,7 +71,14 @@ export default function Dashboard() {
             lg={3}
             key={`card-${entry.id}-${entry.title || entry.name}`}
           >
-            <Card>
+            <Card
+              sx={{ cursor: "pointer" }}
+              onClick={() =>
+                entry.type
+                  ? navigate(`/items/${entry.id}`)
+                  : navigate(`/collections/${entry.id}`)
+              }
+            >
               {entry.cover_url ? (
                 <CardMedia
                   component="img"
@@ -94,9 +103,7 @@ export default function Dashboard() {
               )}
 
               <CardContent>
-                <Typography variant="h6">
-                  {entry.title || entry.name}
-                </Typography>
+                <Typography variant="h6">{entry.title || entry.name}</Typography>
 
                 {entry.type && (
                   <Typography variant="body2" color="text.secondary">
@@ -117,7 +124,9 @@ export default function Dashboard() {
                 )}
 
                 {entry.tags?.length > 0 && (
-                  <Box sx={{ mt: 1, display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  <Box
+                    sx={{ mt: 1, display: "flex", gap: 1, flexWrap: "wrap" }}
+                  >
                     {entry.tags.map((t) => (
                       <Chip key={t.id} label={t.name} size="small" />
                     ))}
@@ -125,14 +134,11 @@ export default function Dashboard() {
                 )}
 
                 {entry.collections?.length > 0 && (
-                  <Box sx={{ mt: 1, display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  <Box
+                    sx={{ mt: 1, display: "flex", gap: 1, flexWrap: "wrap" }}
+                  >
                     {entry.collections.map((c) => (
-                      <Chip
-                        key={c.id}
-                        label={c.name}
-                        color="primary"
-                        size="small"
-                      />
+                      <Chip key={c.id} label={c.name} color="primary" size="small" />
                     ))}
                   </Box>
                 )}
@@ -158,11 +164,7 @@ export default function Dashboard() {
 
       {/* 🔔 Success message */}
       {successMessage && (
-        <Alert
-          severity="info"
-          sx={{ mb: 3 }}
-          onClose={clearSuccess}
-        >
+        <Alert severity="info" sx={{ mb: 3 }} onClose={clearSuccess}>
           {successMessage}
         </Alert>
       )}

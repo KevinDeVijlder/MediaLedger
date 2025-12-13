@@ -4,6 +4,8 @@ import AddItem from "./components/AddItem";
 import AddCollection from "./components/AddCollection";
 import Settings from "./components/Settings";
 import Navigation from "./components/Navigation";
+import ItemDetail from "./components/ItemDetail";
+import CollectionDetail from "./components/CollectionDetail";
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
         <Route path="/add-item" element={<AddItem />} />
         <Route path="/add-collection" element={<AddCollection />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/items/:id" element={<ItemDetail />} />
+        <Route path="/collections/:id" element={<CollectionDetail />} />
       </Routes>
     </>
   );

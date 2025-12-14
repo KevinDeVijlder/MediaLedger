@@ -65,7 +65,7 @@ export default function CollectionDetail() {
 
       triggerRefresh();
       notifySuccess("Collection updated successfully!");
-      navigate("/");
+      navigate("/collection");
     } catch {
       setError("Failed to update collection.");
     }
@@ -82,7 +82,7 @@ export default function CollectionDetail() {
       }
       triggerRefresh();
       notifySuccess("Collection deleted successfully!");
-      navigate("/");
+      navigate("/collection");
     } catch {
       setError("Failed to delete collection.");
     }

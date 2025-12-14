@@ -42,7 +42,7 @@ export default function AddCollection() {
       // 🔄 Trigger refresh and show success
       triggerRefresh();
       notifySuccess("Collection added successfully!");
-      navigate("/collection"); // Navigate to dashboard
+      navigate("/collection"); // Navigate to collection page
     } catch (err) {
       console.error(err);
       setError("Failed to add collection");

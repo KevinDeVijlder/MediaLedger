@@ -77,7 +77,7 @@ export default function AddItem() {
       // 🔄 Trigger dashboard refresh and show success
       triggerRefresh();
       notifySuccess("Item added successfully!");
-      navigate("/"); // Navigate to dashboard
+      navigate("/item"); // Navigate to item page
     } catch (err) {
       console.error(err);
       setError("Error adding item.");

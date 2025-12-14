@@ -84,7 +84,7 @@ export default function ItemDetail() {
 
     triggerRefresh();
     notifySuccess("Item updated successfully");
-    navigate("/");
+    navigate("/item");
   };
 
   // 🔹 Delete item
@@ -97,7 +97,7 @@ export default function ItemDetail() {
 
       triggerRefresh();
       notifySuccess("Item deleted successfully");
-      navigate("/");
+      navigate("/item");
     } catch (err) {
       console.error(err);
       alert("Failed to delete item");

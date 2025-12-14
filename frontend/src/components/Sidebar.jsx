@@ -1,17 +1,83 @@
-import { List, ListItemButton, ListItemIcon, ListItemText, Tooltip, Box } from "@mui/material";
-import { Home, Widgets, Category, Settings, Menu } from "@mui/icons-material";
+import {
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Box,
+  Collapse,
+} from "@mui/material";
+import {
+  Home,
+  Widgets,
+  BrowseGallery,
+  Tune,
+  Menu,
+  AddCircle,
+  Create,
+  CreateNewFolder,
+} from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const navItems = [
   { label: "Dashboard", icon: <Home />, path: "/" },
   { label: "Items", icon: <Widgets />, path: "/item" },
-  { label: "Collections", icon: <Category />, path: "/collection" },
-  { label: "Settings", icon: <Settings />, path: "/settings" },
+  { label: "Collections", icon: <BrowseGallery />, path: "/collection" },
 ];
 
 export default function Sidebar({ isExpanded, onToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [addOpen, setAddOpen] = useState(false);
+
+  const renderListItem = (item, active = false) => (
+    <Tooltip key={item.label} title={isExpanded ? "" : item.label} placement="right">
+      <ListItemButton
+        onClick={() => navigate(item.path)}
+        sx={{
+          mb: 1,
+          height: 56,
+          bgcolor: active ? "rgba(255,255,255,0.1)" : "transparent",
+          borderLeft: "5px solid transparent",
+          borderLeftColor: active ? "#FF6D00" : "transparent",
+          borderRight: "5px solid transparent", // invisible right border for centering
+          borderRadius: 0.65,
+          "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
+          boxSizing: "border-box",
+          display: "flex",
+          justifyContent: isExpanded ? "flex-start" : "center",
+        }}
+      >
+        <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
+          {item.icon}
+        </ListItemIcon>
+        {isExpanded && <ListItemText primary={item.label} />}
+      </ListItemButton>
+    </Tooltip>
+  );
+
+  const renderAddButton = (icon, label, path, nested = false) => (
+    <Tooltip title={isExpanded ? "" : label} placement="right">
+      <ListItemButton
+        onClick={() => navigate(path)}
+        sx={{
+          height: nested ? 48 : 56,
+          borderLeft: "5px solid transparent",
+          borderRight: "5px solid transparent", // invisible right border
+          "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
+          boxSizing: "border-box",
+          display: "flex",
+          justifyContent: isExpanded ? "flex-start" : "center",
+        }}
+      >
+        <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
+          {icon}
+        </ListItemIcon>
+        {isExpanded && <ListItemText primary={label} />}
+      </ListItemButton>
+    </Tooltip>
+  );
 
   return (
     <Box
@@ -29,7 +95,7 @@ export default function Sidebar({ isExpanded, onToggle }) {
         overflow: "hidden",
       }}
     >
-      {/* Expand/Collapse Button */}
+      {/* Expand / Collapse */}
       <Box sx={{ p: 1 }}>
         <ListItemButton
           onClick={onToggle}
@@ -37,6 +103,7 @@ export default function Sidebar({ isExpanded, onToggle }) {
             justifyContent: isExpanded ? "flex-start" : "center",
             mb: 2,
             height: 56,
+            borderRight: "5px solid transparent", // right border for centering
           }}
         >
           <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
@@ -46,32 +113,44 @@ export default function Sidebar({ isExpanded, onToggle }) {
         </ListItemButton>
       </Box>
 
-      {/* Navigation Items */}
       <List sx={{ flexGrow: 1, p: 0 }}>
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Tooltip key={item.label} title={isExpanded ? "" : item.label} placement="right">
-              <ListItemButton
-                onClick={() => navigate(item.path)}
-                sx={{
-                  mb: 1,
-                  borderRadius: 1,
-                  height: 56,
-                  justifyContent: "flex-start",
-                  bgcolor: isActive ? "#262525" : "transparent",
-                  borderLeft: isActive ? "5px solid #FF6D00" : "4px solid transparent",
-                  "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 0, color: "#fff", justifyContent: "center", mr: isExpanded ? 2 : 0 }}>
-                  {item.icon}
-                </ListItemIcon>
-                {isExpanded && <ListItemText primary={item.label} />}
-              </ListItemButton>
-            </Tooltip>
-          );
-        })}
+        {/* Standard navigation */}
+        {navItems.map((item) =>
+          renderListItem(item, location.pathname === item.path)
+        )}
+
+        {/* ADD SECTION */}
+        <ListItemButton
+          onClick={() => setAddOpen((prev) => !prev)}
+          sx={{
+            mt: 1,
+            height: 56,
+            borderLeft: "5px solid transparent",
+            borderRight: "5px solid transparent",
+            boxSizing: "border-box",
+            display: "flex",
+            justifyContent: isExpanded ? "flex-start" : "center",
+            "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
+            <AddCircle />
+          </ListItemIcon>
+          {isExpanded && <ListItemText primary="Add" />}
+        </ListItemButton>
+
+        <Collapse in={addOpen} timeout="auto" unmountOnExit>
+          <List disablePadding>
+            {renderAddButton(<Create />, "Add Item", "/add-item", true)}
+            {renderAddButton(<CreateNewFolder />, "Add Collection", "/add-collection", true)}
+          </List>
+        </Collapse>
+
+        {/* Configuration */}
+        {renderListItem(
+          { label: "Configuration", icon: <Tune />, path: "/configuration" },
+          location.pathname === "/configuration"
+        )}
       </List>
     </Box>
   );

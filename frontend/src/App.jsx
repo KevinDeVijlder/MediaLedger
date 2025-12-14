@@ -9,7 +9,7 @@ import ItemDetail from "./components/items/ItemDetail";
 import Collection from "./components/collection/Collection"
 import AddCollection from "./components/collection/AddCollection";
 import CollectionDetail from "./components/collection/CollectionDetail";
-import Settings from "./components/Settings";
+import Configuration from "./components/configuration";
 
 export default function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -44,7 +44,7 @@ export default function App() {
           <Route path="/add-item" element={<AddItem />} />
           <Route path="/collection" element={<Collection />} />
           <Route path="/add-collection" element={<AddCollection />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/configuration" element={<Configuration />} />
           <Route path="/items/:id" element={<ItemDetail />} />
           <Route path="/collections/:id" element={<CollectionDetail />} />
         </Routes>

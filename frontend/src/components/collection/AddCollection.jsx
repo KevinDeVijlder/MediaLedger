@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Box, TextField, Button, Typography, Alert } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  Paper,
+  Stack,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../AppContext";
 
@@ -9,7 +17,7 @@ export default function AddCollection() {
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState(null);
 
-  const { triggerRefresh, notifySuccess } = useApp(); // ✅ Correct usage
+  const { triggerRefresh, notifySuccess } = useApp();
   const navigate = useNavigate();
   const API = "http://localhost:3001";
 
@@ -39,10 +47,9 @@ export default function AddCollection() {
         return;
       }
 
-      // 🔄 Trigger refresh and show success
       triggerRefresh();
       notifySuccess("Collection added successfully!");
-      navigate("/collection"); // Navigate to collection page
+      navigate("/collection");
     } catch (err) {
       console.error(err);
       setError("Failed to add collection");
@@ -50,53 +57,126 @@ export default function AddCollection() {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mt: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Add New Collection
+    <Box sx={{ maxWidth: 720, mx: "auto", mt: 4, px: 2 }}>
+      {/* Page title */}
+      <Typography
+        variant="h4"
+        sx={{
+          fontFamily: "Ubuntu",
+          fontWeight: 700,
+          mb: 3,
+        }}
+      >
+        Add Collection
       </Typography>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      <Paper
+        elevation={0}
+      >
+        <Stack spacing={3}>
+          {error && <Alert severity="error">{error}</Alert>}
 
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Collection Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Description (optional)"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          fullWidth
-          multiline
-          rows={2}
-          sx={{ mb: 2 }}
-        />
-        {/* Image Upload */}
-        <Box sx={{ mb: 3 }}>
-          <Button variant="contained" component="label">
-            Upload Cover Image
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  setImageFile(e.target.files[0]);
-                }
-              }}
-            />
-          </Button>
-          {imageFile && (
-            <Typography sx={{ mt: 1 }}>Selected file: {imageFile.name}</Typography>
-          )}
-        </Box>
-        <Button variant="contained" type="submit" fullWidth>
-          Add Collection
-        </Button>
-      </form>
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={3}>
+              <TextField
+                label="Collection name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                sx={{
+                  mb: 2,
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#FF6D00",
+                    },
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#FF6D00",
+                  },
+                }}
+              />
+
+              <TextField
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                fullWidth
+                multiline
+                rows={3}
+                placeholder="Optional description of this collection"
+                sx={{
+                  mb: 2,
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#FF6D00",
+                    },
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#FF6D00",
+                  },
+                }}
+              />
+
+              {/* Image upload */}
+              <Box>
+                <Button
+                  variant="outlined"
+                  component="label"
+                  sx={{ textTransform: "none", bgcolor: "rgba(255, 109, 0, 0.9)" , color: "black", borderColor: "#FF6D00",  "&:hover": {
+      bgcolor: "rgba(255, 109, 0, 1)",
+    }}}
+                >
+                  Upload cover image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setImageFile(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </Button>
+
+                {imageFile && (
+                  <Typography
+                    variant="body2"
+                    sx={{ mt: 1, color: "#FF6D00" }}
+                  >
+                    Selected file: {imageFile.name}
+                  </Typography>
+                )}
+              </Box>
+
+              {/* Actions */}
+              <Stack direction="row" spacing={2} justifyContent="flex-end">
+                <Button
+                  variant="text"
+                  sx={{color: "rgba(255, 109, 0, 1)", "&:hover": {
+      bgcolor: "rgba(255, 109, 0, 0.1)", 
+                  }}}
+                  onClick={() => navigate("/collection")}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{
+                    textTransform: "none",
+                    px: 3, bgcolor: "rgba(255, 109, 0, 0.9)" , color: "black", borderColor: "#FF6D00",  "&:hover": {
+      bgcolor: "rgba(255, 109, 0, 1)", 
+                  }}}
+                >
+                  Add Collection
+                </Button>
+              </Stack>
+            </Stack>
+          </form>
+        </Stack>
+      </Paper>
     </Box>
   );
 }

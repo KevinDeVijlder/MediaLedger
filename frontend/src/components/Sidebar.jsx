@@ -13,6 +13,7 @@ import {
   BrowseGallery,
   Tune,
   Menu,
+  MenuOpen,
   AddCircle,
   Create,
   CreateNewFolder,
@@ -131,23 +132,27 @@ export default function Sidebar({ isExpanded, onToggle }) {
       </Box>
 
       {/* Expand / Collapse */}
-      <Box sx={{ p: 1 }}>
+      <Box>
         <ListItemButton
           onClick={onToggle}
           sx={{
-            justifyContent: isExpanded ? "flex-start" : "center",
-            mb: 2,
+            mb: 1,                 // SAME as others
             height: 56,
+            borderLeft: "5px solid transparent",
             borderRight: "5px solid transparent",
+            color: "rgba(255,255,255,0.4)",
+            boxSizing: "border-box",
+            display: "flex",
+            justifyContent: isExpanded ? "flex-start" : "center",
           }}
         >
-          <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
-            <Menu />
+          <ListItemIcon sx={{ minWidth: 0, color: "rgba(255,255,255,0.4)", mr: isExpanded ? 2 : 0}}>
+            {isExpanded ? <MenuOpen /> : <Menu />}
           </ListItemIcon>
           {isExpanded && (
             <ListItemText
-              primary="Menu"
-              primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
+              primary="Collapse"
+              primaryTypographyProps={{ sx: { fontFamily: "Ubuntu"} }}
             />
           )}
         </ListItemButton>

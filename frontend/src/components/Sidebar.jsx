@@ -19,6 +19,8 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import Logo from '../assets/logosmall.png'; // your logo path
+import 'typeface-ubuntu';
 
 const navItems = [
   { label: "Dashboard", icon: <Home />, path: "/" },
@@ -52,7 +54,12 @@ export default function Sidebar({ isExpanded, onToggle }) {
         <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
           {item.icon}
         </ListItemIcon>
-        {isExpanded && <ListItemText primary={item.label} />}
+        {isExpanded && (
+          <ListItemText
+            primary={item.label}
+            primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
+          />
+        )}
       </ListItemButton>
     </Tooltip>
   );
@@ -74,7 +81,12 @@ export default function Sidebar({ isExpanded, onToggle }) {
         <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
           {icon}
         </ListItemIcon>
-        {isExpanded && <ListItemText primary={label} />}
+        {isExpanded && (
+          <ListItemText
+            primary={label}
+            primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
+          />
+        )}
       </ListItemButton>
     </Tooltip>
   );
@@ -95,6 +107,29 @@ export default function Sidebar({ isExpanded, onToggle }) {
         overflow: "hidden",
       }}
     >
+      {/* Logo */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: isExpanded ? "flex-start" : "center",
+          p: 1,
+          mb: 1,
+        }}
+      >
+        <Box
+          component="img"
+          src={Logo}
+          alt="App Logo"
+          sx={{ height: 40, width: 40, transition: "all 0.3s" }}
+        />
+        {isExpanded && (
+          <Box sx={{ ml: 1, fontFamily: "Ubuntu", fontWeight: "bold" }}>
+            MediaLedger
+          </Box>
+        )}
+      </Box>
+
       {/* Expand / Collapse */}
       <Box sx={{ p: 1 }}>
         <ListItemButton
@@ -103,21 +138,24 @@ export default function Sidebar({ isExpanded, onToggle }) {
             justifyContent: isExpanded ? "flex-start" : "center",
             mb: 2,
             height: 56,
-            borderRight: "5px solid transparent", // right border for centering
+            borderRight: "5px solid transparent",
           }}
         >
           <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
             <Menu />
           </ListItemIcon>
-          {isExpanded && <ListItemText primary="Menu" />}
+          {isExpanded && (
+            <ListItemText
+              primary="Menu"
+              primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
+            />
+          )}
         </ListItemButton>
       </Box>
 
       <List sx={{ flexGrow: 1, p: 0 }}>
         {/* Standard navigation */}
-        {navItems.map((item) =>
-          renderListItem(item, location.pathname === item.path)
-        )}
+        {navItems.map((item) => renderListItem(item, location.pathname === item.path))}
 
         {/* ADD SECTION */}
         <ListItemButton
@@ -136,7 +174,12 @@ export default function Sidebar({ isExpanded, onToggle }) {
           <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
             <AddCircle />
           </ListItemIcon>
-          {isExpanded && <ListItemText primary="Add" />}
+          {isExpanded && (
+            <ListItemText
+              primary="Add"
+              primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
+            />
+          )}
         </ListItemButton>
 
         <Collapse in={addOpen} timeout="auto" unmountOnExit>

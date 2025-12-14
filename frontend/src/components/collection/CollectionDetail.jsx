@@ -12,7 +12,7 @@ import {
   CardContent,
   Chip,
 } from "@mui/material";
-import { useApp } from "../AppContext";
+import { useApp } from "../../AppContext";
 
 export default function CollectionDetail() {
   const { id } = useParams();

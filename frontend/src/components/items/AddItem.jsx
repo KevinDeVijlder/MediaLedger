@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useApp } from "../AppContext";
+import { useApp } from "../../AppContext";
 
 export default function AddItem() {
   const [title, setTitle] = useState("");

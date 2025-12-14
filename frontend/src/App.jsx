@@ -3,11 +3,13 @@ import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
-import AddItem from "./components/AddItem";
-import AddCollection from "./components/AddCollection";
+import Item from "./components/items/Item";
+import AddItem from "./components/items/AddItem";
+import ItemDetail from "./components/items/ItemDetail";
+import Collection from "./components/collection/Collection"
+import AddCollection from "./components/collection/AddCollection";
+import CollectionDetail from "./components/collection/CollectionDetail";
 import Settings from "./components/Settings";
-import ItemDetail from "./components/ItemDetail";
-import CollectionDetail from "./components/CollectionDetail";
 
 export default function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -38,7 +40,9 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/item" element={<Item />} />
           <Route path="/add-item" element={<AddItem />} />
+          <Route path="/collection" element={<Collection />} />
           <Route path="/add-collection" element={<AddCollection />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/items/:id" element={<ItemDetail />} />

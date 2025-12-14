@@ -1,11 +1,11 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Tooltip, Box } from "@mui/material";
-import { Home, AddBox, Collections, Settings, Menu } from "@mui/icons-material";
+import { Home, Widgets, Category, Settings, Menu } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
   { label: "Dashboard", icon: <Home />, path: "/" },
-  { label: "Add Item", icon: <AddBox />, path: "/add-item" },
-  { label: "Add Collection", icon: <Collections />, path: "/add-collection" },
+  { label: "Items", icon: <Widgets />, path: "/item" },
+  { label: "Collections", icon: <Category />, path: "/collection" },
   { label: "Settings", icon: <Settings />, path: "/settings" },
 ];
 

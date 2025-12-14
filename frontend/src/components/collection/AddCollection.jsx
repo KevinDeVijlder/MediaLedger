@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, TextField, Button, Typography, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useApp } from "../AppContext";
+import { useApp } from "../../AppContext";
 
 export default function AddCollection() {
   const [name, setName] = useState("");

@@ -6,7 +6,6 @@ import {
   CardMedia,
   CardContent,
   Typography,
-  Chip,
   Alert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -81,7 +80,7 @@ function ItemCard({ item, api, onClick }) {
         display: "flex",
         flexDirection: "column",
         width: 200,
-        height: 360,
+        height: 440,
         borderRadius: 2,
         overflow: "hidden",
         boxShadow: "0 6px 18px rgba(15,23,42,0.08)",
@@ -103,6 +102,27 @@ function ItemCard({ item, api, onClick }) {
           flex: "0 0 auto",
         })}
       >
+        {item.media_type_name && (
+          <Box
+            sx={(t) => ({
+              position: "absolute",
+              top: 8,
+              right: 8,
+              bgcolor: "#FF6D00",
+              color: "#fff",
+              px: 1,
+              py: 0.25,
+              borderRadius: 1.5,
+              fontSize: 12,
+              fontWeight: 700,
+              zIndex: 3,
+              boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
+              pointerEvents: "none",
+            })}
+          >
+            {item.media_type_name}
+          </Box>
+        )}
         {item.cover_url ? (
           <CardMedia
             component="img"
@@ -134,22 +154,15 @@ function ItemCard({ item, api, onClick }) {
         )}
       </Box>
 
-      <CardContent sx={{ flex: "0 0 64px", py: 1, overflow: "hidden" }}>
-        <Typography variant="subtitle1" noWrap sx={{ fontWeight: 600 }}>
-          {item.title}
-        </Typography>
+      <CardContent sx={{ flex: "0 0 140px", py: 2, overflow: "hidden", display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Box>
+          <Typography variant="h6" noWrap sx={{ fontWeight: 700 }}>
+            {item.title}
+          </Typography>
 
-        <Typography variant="body2" color="text.secondary" noWrap>
-          {item.media_type_name || item.type || ""}
-        </Typography>
-
-        <Box sx={{ mt: 1, display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: 'center' }}>
-          {item.tags?.slice(0, 4).map((t) => (
-            <Chip key={t.id} label={t.name} size="small" />
-          ))}
-          {item.collections?.slice(0, 2).map((c) => (
-            <Chip key={c.id} label={c.name} color="primary" size="small" />
-          ))}
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }} noWrap>
+            {item.type || ""}
+          </Typography>
         </Box>
       </CardContent>
     </Card>

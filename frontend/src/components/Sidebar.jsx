@@ -5,18 +5,18 @@ import {
   ListItemText,
   Tooltip,
   Box,
-  Collapse,
 } from "@mui/material";
 import {
   Home,
   Widgets,
   BrowseGallery,
+  LocalMovies,
+  Tv,
+  SportsEsports,
   Tune,
   Menu,
   MenuOpen,
   AddCircle,
-  Create,
-  CreateNewFolder,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -26,13 +26,16 @@ import 'typeface-ubuntu';
 const navItems = [
   { label: "Dashboard", icon: <Home />, path: "/" },
   { label: "Items", icon: <Widgets />, path: "/item" },
+  { label: "Movies", icon: <LocalMovies />, path: "/movies" },
+  { label: "TV Shows", icon: <Tv />, path: "/tvshows" },
+  { label: "Games", icon: <SportsEsports />, path: "/games" },
   { label: "Collections", icon: <BrowseGallery />, path: "/collection" },
 ];
 
 export default function Sidebar({ isExpanded, onToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [addOpen, setAddOpen] = useState(false);
+  
 
   const renderListItem = (item, active = false) => (
     <Tooltip key={item.label} title={isExpanded ? "" : item.label} placement="right">
@@ -65,32 +68,7 @@ export default function Sidebar({ isExpanded, onToggle }) {
     </Tooltip>
   );
 
-  const renderAddButton = (icon, label, path, nested = false) => (
-    <Tooltip title={isExpanded ? "" : label} placement="right">
-      <ListItemButton
-        onClick={() => navigate(path)}
-        sx={{
-          height: nested ? 48 : 56,
-          borderLeft: "5px solid transparent",
-          borderRight: "5px solid transparent", // invisible right border
-          "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
-          boxSizing: "border-box",
-          display: "flex",
-          justifyContent: isExpanded ? "flex-start" : "center",
-        }}
-      >
-        <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
-          {icon}
-        </ListItemIcon>
-        {isExpanded && (
-          <ListItemText
-            primary={label}
-            primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
-          />
-        )}
-      </ListItemButton>
-    </Tooltip>
-  );
+  
 
   return (
     <Box
@@ -162,9 +140,9 @@ export default function Sidebar({ isExpanded, onToggle }) {
         {/* Standard navigation */}
         {navItems.map((item) => renderListItem(item, location.pathname === item.path))}
 
-        {/* ADD SECTION */}
+        {/* CREATE PAGE NAV */}
         <ListItemButton
-          onClick={() => setAddOpen((prev) => !prev)}
+          onClick={() => navigate("/create")}
           sx={{
             mt: 1,
             height: 56,
@@ -181,18 +159,11 @@ export default function Sidebar({ isExpanded, onToggle }) {
           </ListItemIcon>
           {isExpanded && (
             <ListItemText
-              primary="Add"
+              primary="Create"
               primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
             />
           )}
         </ListItemButton>
-
-        <Collapse in={addOpen} timeout="auto" unmountOnExit>
-          <List disablePadding>
-            {renderAddButton(<Create />, "Add Item", "/add-item", true)}
-            {renderAddButton(<CreateNewFolder />, "Add Collection", "/add-collection", true)}
-          </List>
-        </Collapse>
 
         {/* Configuration */}
         {renderListItem(

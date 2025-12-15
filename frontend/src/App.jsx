@@ -10,6 +10,10 @@ import Collection from "./components/collection/Collection"
 import AddCollection from "./components/collection/AddCollection";
 import CollectionDetail from "./components/collection/CollectionDetail";
 import Configuration from "./components/configuration";
+import Create from "./components/create";
+import Movies from "./components/displays/movies";
+import TvShows from "./components/displays/tvshows";
+import Games from "./components/displays/games";
 
 export default function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -41,10 +45,14 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/item" element={<Item />} />
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/tvshows" element={<TvShows />} />
+          <Route path="/games" element={<Games />} />
           <Route path="/add-item" element={<AddItem />} />
           <Route path="/collection" element={<Collection />} />
           <Route path="/add-collection" element={<AddCollection />} />
           <Route path="/configuration" element={<Configuration />} />
+          <Route path="/create" element={<Create />} />
           <Route path="/items/:id" element={<ItemDetail />} />
           <Route path="/collections/:id" element={<CollectionDetail />} />
         </Routes>

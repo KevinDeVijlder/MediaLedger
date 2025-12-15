@@ -35,7 +35,7 @@ const navItems = [
 export default function Sidebar({ isExpanded, onToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const isCreateActive = location.pathname === "/create";
 
   const renderListItem = (item, active = false) => (
     <Tooltip key={item.label} title={isExpanded ? "" : item.label} placement="right">
@@ -148,6 +148,9 @@ export default function Sidebar({ isExpanded, onToggle }) {
             height: 56,
             borderLeft: "5px solid transparent",
             borderRight: "5px solid transparent",
+            borderLeftColor: isCreateActive ? "#FF6D00" : "transparent",
+            bgcolor: isCreateActive ? "rgba(255,255,255,0.1)" : "transparent",
+            borderRadius: 0.65,
             boxSizing: "border-box",
             display: "flex",
             justifyContent: isExpanded ? "flex-start" : "center",

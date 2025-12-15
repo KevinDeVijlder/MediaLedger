@@ -84,7 +84,7 @@ export default function Create() {
             icon={<Tv />}
             title="TV Show"
             description="Add a TV show entry. You can later attach seasons and episodes."
-            onClick={() => navigate('/add-item', { state: { type: 'tv' } })}
+            onClick={() => navigate('/add-item', { state: { type: 'tvshow' } })}
           />
         </Grid>
 

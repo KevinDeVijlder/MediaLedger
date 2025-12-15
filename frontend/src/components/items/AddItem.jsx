@@ -12,7 +12,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useApp } from "../../AppContext";
 
 export default function AddItem() {
@@ -32,6 +32,7 @@ export default function AddItem() {
 
   const { triggerRefresh, notifySuccess } = useApp(); // ✅ Correct function
   const navigate = useNavigate();
+  const location = useLocation();
   const API = "http://localhost:3001";
 
   useEffect(() => {
@@ -43,6 +44,16 @@ export default function AddItem() {
     }
     loadData();
   }, []);
+
+  // Prefill the Type if the user navigated here with state
+  useEffect(() => {
+    const incomingType = location?.state?.type;
+    if (incomingType) {
+      // Create used 'tv' for TV shows — map it to the form's 'tvshow' value
+      if (incomingType === "tv") setType("tvshow");
+      else setType(incomingType);
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

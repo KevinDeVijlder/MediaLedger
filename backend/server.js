@@ -8,6 +8,7 @@ import mediaTypesRouter from "./routes/mediaTypes.js";
 import tagsRouter from "./routes/tags.js";
 import collectionsRouter from "./routes/collections.js";
 import itemsRouter from "./routes/items.js";
+import boardgamesRouter from "./routes/boardgames.js";
 
 
 
@@ -22,6 +23,7 @@ app.use("/media-types", mediaTypesRouter);
 app.use("/tags", tagsRouter);
 app.use("/collections", collectionsRouter);
 app.use("/items", itemsRouter);
+app.use("/boardgames", boardgamesRouter);
 
 // initialize DB schema
 initializeDatabase();

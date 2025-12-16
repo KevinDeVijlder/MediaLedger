@@ -50,6 +50,24 @@ export function initializeDatabase() {
       );
     `);
 
+    // Boardgames
+    db.run(`
+      CREATE TABLE IF NOT EXISTS boardgames (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT,
+        cover_url TEXT,
+        publisher TEXT,
+        min_players INTEGER,
+        max_players INTEGER,
+        avg_playtime INTEGER,
+        complexity_weight REAL,
+        added_at DATETIME DEFAULT (datetime('now')),
+        updated_at DATETIME,
+        in_trash INTEGER DEFAULT 0
+      );
+    `);
+
     // Item <-> Collections
     db.run(`
       CREATE TABLE IF NOT EXISTS item_collections (

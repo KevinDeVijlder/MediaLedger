@@ -15,7 +15,10 @@ import Movies from "./components/displays/movie/movies";
 import TvShows from "./components/displays/tvshow/tvshows";
 import Games from "./components/displays/game/games";
 import Books from "./components/displays/book/books";
-import Boardgames from "./components/displays/boardgame/boardgames";
+import Boardgames from "./components/displays/boardgame/Boardgame";
+import AddBoardgame from "./components/displays/boardgame/AddBoardgame";
+import BoardgameDetail from "./components/displays/boardgame/BoardgameDetail";
+import EditBoardgame from "./components/displays/boardgame/EditBoardgame";
 
 export default function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -52,6 +55,9 @@ export default function App() {
           <Route path="/games" element={<Games />} />
           <Route path="/books" element={<Books />} />
           <Route path="/boardgames" element={<Boardgames />} />
+          <Route path="/boardgames/add" element={<AddBoardgame />} />
+          <Route path="/boardgames/:id" element={<BoardgameDetail />} />
+          <Route path="/boardgames/:id/edit" element={<EditBoardgame />} />
           <Route path="/add-item" element={<AddItem />} />
           <Route path="/collection" element={<Collection />} />
           <Route path="/add-collection" element={<AddCollection />} />

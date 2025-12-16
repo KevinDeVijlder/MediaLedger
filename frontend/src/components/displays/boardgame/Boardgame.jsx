@@ -90,6 +90,7 @@ function BoardgameCard({ item, api, onClick }) {
   return (
     <Card
       onClick={onClick}
+      className="boardgame-card"
       sx={{
         cursor: "pointer",
         display: "flex",
@@ -98,15 +99,18 @@ function BoardgameCard({ item, api, onClick }) {
         height: 520,
         borderRadius: 3,
         overflow: "hidden",
-        boxShadow: "0 10px 30px rgba(2,6,23,0.12)",
-        transition: "transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms",
+        boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
+        transition: "box-shadow 220ms, transform 180ms",
         '&:hover': {
-          transform: "translateY(-10px) scale(1.02)",
-          boxShadow: "0 30px 60px rgba(2,6,23,0.18)",
+          boxShadow: "0 18px 40px rgba(2,6,23,0.12)",
         },
-        bgcolor: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
-        m: "auto",
-        border: (t) => `1px solid rgba(255,255,255,0.03)`,
+        '&:hover .complexity-badge': {
+          boxShadow: '0 8px 24px rgba(255,109,0,0.32)',
+          transform: 'scale(1.06)',
+        },
+        '&:hover .boardgame-bottom .boardgame-underline': {
+          width: '48%',
+        },
         backdropFilter: "saturate(140%) blur(6px)",
       }}
     >
@@ -121,7 +125,7 @@ function BoardgameCard({ item, api, onClick }) {
       >
         {/* Complexity badge */}
         <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 5 }}>
-          <Chip label={item.complexity_weight ?? '-'} size="small" color={getBadgeColor(item.complexity_weight)} sx={{ color: '#fff', fontWeight: 800 }} />
+          <Chip className="complexity-badge" label={item.complexity_weight ?? '-'} size="small" color={getBadgeColor(item.complexity_weight)} sx={{ color: '#fff', fontWeight: 800, transition: 'box-shadow 220ms, transform 220ms' }} />
         </Box>
         {item.cover_url ? (
           <CardMedia
@@ -151,11 +155,12 @@ function BoardgameCard({ item, api, onClick }) {
         )}
       </Box>
 
-      <CardContent sx={{ flex: "0 0 160px", py: 2.5, overflow: "hidden", display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <CardContent className="boardgame-bottom" sx={{ flex: "0 0 160px", py: 2.5, overflow: "hidden", display: 'flex', flexDirection: 'column', justifyContent: 'center', transition: 'background 240ms' }}>
         <Box>
           <Typography variant="h6" noWrap sx={{ fontWeight: 800, letterSpacing: 0.2 }}>
             {item.name}
           </Typography>
+          <Box className="boardgame-underline" sx={{ width: 0, height: 4, background: '#FF6D00', borderRadius: 2, mt: 1, transition: 'width 260ms' }} />
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             Players: {item.min_players ?? "?"} - {item.max_players ?? "?"}

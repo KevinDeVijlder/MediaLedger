@@ -39,7 +39,6 @@ const navItems = [
 export default function Sidebar({ isExpanded, onToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isCreateActive = location.pathname === "/create";
 
   const renderListItem = (item, active = false) => (
     <Tooltip key={item.label} title={isExpanded ? "" : item.label} placement="right">
@@ -143,34 +142,6 @@ export default function Sidebar({ isExpanded, onToggle }) {
       <List sx={{ flexGrow: 1, p: 0 }}>
         {/* Standard navigation */}
         {navItems.map((item) => renderListItem(item, location.pathname === item.path))}
-
-        {/* CREATE PAGE NAV */}
-        <ListItemButton
-          onClick={() => navigate("/create")}
-          sx={{
-            mt: 1,
-            height: 56,
-            borderLeft: "5px solid transparent",
-            borderRight: "5px solid transparent",
-            borderLeftColor: isCreateActive ? "#FF6D00" : "transparent",
-            bgcolor: isCreateActive ? "rgba(255,255,255,0.1)" : "transparent",
-            borderRadius: 0.65,
-            boxSizing: "border-box",
-            display: "flex",
-            justifyContent: isExpanded ? "flex-start" : "center",
-            "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
-          }}
-        >
-          <ListItemIcon sx={{ minWidth: 0, color: "#fff", mr: isExpanded ? 2 : 0 }}>
-            <AddCircle />
-          </ListItemIcon>
-          {isExpanded && (
-            <ListItemText
-              primary="Create"
-              primaryTypographyProps={{ sx: { fontFamily: "Ubuntu" } }}
-            />
-          )}
-        </ListItemButton>
 
         {/* Configuration */}
         {renderListItem(

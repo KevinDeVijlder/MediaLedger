@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import {
   Box,
-  Grid,
   Card,
   CardMedia,
   CardContent,
   Typography,
-  Chip,
   Alert,
   Button,
+  Chip,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../AppContext";
 
@@ -52,45 +52,122 @@ export default function Boardgame() {
         </Alert>
       )}
 
-      <Grid container spacing={3}>
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          gridTemplateColumns: {
+            xs: "repeat(1, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(5, 1fr)",
+          },
+          alignItems: "start",
+        }}
+      >
         {items.map((item) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-            <Card sx={{ cursor: "pointer" }} onClick={() => navigate(`/boardgames/${item.id}`)}>
-              {item.cover_url ? (
-                <CardMedia component="img" height="200" image={`${API}/${item.cover_url}`} alt={item.name} />
-              ) : (
-                <Box sx={{ height: 200, bgcolor: "#eee", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Typography variant="subtitle1">{item.name}</Typography>
-                </Box>
-              )}
-
-              <CardContent>
-                <Typography variant="h6">{item.name}</Typography>
-
-                {item.publisher && (
-                  <Typography variant="body2" color="text.secondary">Publisher: {item.publisher}</Typography>
-                )}
-
-                {item.min_players != null && item.max_players != null && (
-                  <Typography variant="body2" color="text.secondary">Players: {item.min_players} - {item.max_players}</Typography>
-                )}
-
-                {item.avg_playtime != null && (
-                  <Typography variant="body2" color="text.secondary">Avg playtime: {item.avg_playtime} mins</Typography>
-                )}
-
-                {item.tags?.length > 0 && (
-                  <Box sx={{ mt: 1, display: "flex", gap: 1, flexWrap: "wrap" }}>
-                    {item.tags.map((t) => (
-                      <Chip key={t.id} label={t.name} size="small" />
-                    ))}
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
+          <Box key={item.id} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <BoardgameCard item={item} api={API} onClick={() => navigate(`/boardgames/${item.id}`)} />
+          </Box>
         ))}
-      </Grid>
+      </Box>
     </Box>
+  );
+}
+
+function BoardgameCard({ item, api, onClick }) {
+  const theme = useTheme();
+
+  const getBadgeColor = (val) => {
+    const v = Number(val);
+    if (!isFinite(v)) return "default";
+    if (v <= 3) return "success"; // green
+    if (v > 3 && v <= 7) return "warning"; // yellow
+    if (v > 7 && v <= 9) return "error"; // red
+    return "secondary"; // purple
+  };
+
+  return (
+    <Card
+      onClick={onClick}
+      sx={{
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
+        width: '100%',
+        height: 520,
+        borderRadius: 3,
+        overflow: "hidden",
+        boxShadow: "0 10px 30px rgba(2,6,23,0.12)",
+        transition: "transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms",
+        '&:hover': {
+          transform: "translateY(-10px) scale(1.02)",
+          boxShadow: "0 30px 60px rgba(2,6,23,0.18)",
+        },
+        bgcolor: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+        m: "auto",
+        border: (t) => `1px solid rgba(255,255,255,0.03)`,
+        backdropFilter: "saturate(140%) blur(6px)",
+      }}
+    >
+      <Box
+        sx={(t) => ({
+          width: "100%",
+          aspectRatio: "2 / 3",
+          backgroundColor: t.palette.grey[100],
+          position: "relative",
+          flex: "0 0 auto",
+        })}
+      >
+        {/* Complexity badge */}
+        <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 5 }}>
+          <Chip label={item.complexity_weight ?? '-'} size="small" color={getBadgeColor(item.complexity_weight)} sx={{ color: '#fff', fontWeight: 800 }} />
+        </Box>
+        {item.cover_url ? (
+          <CardMedia
+            component="img"
+            image={`${api}/${item.cover_url}`}
+            alt={item.name}
+            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              px: 2,
+              textAlign: "center",
+              color: (t) => t.palette.text.secondary,
+            }}
+          >
+            <Box sx={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05))` }} />
+            <Typography variant="h6" sx={{ zIndex: 1 }}>
+              {item.name}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+
+      <CardContent sx={{ flex: "0 0 160px", py: 2.5, overflow: "hidden", display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Box>
+          <Typography variant="h6" noWrap sx={{ fontWeight: 800, letterSpacing: 0.2 }}>
+            {item.name}
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Players: {item.min_players ?? "?"} - {item.max_players ?? "?"}
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            Avg playtime: {item.avg_playtime != null ? `${item.avg_playtime} mins` : "-"}
+          </Typography>
+
+          {/* complexity shown as top-right badge only */}
+        </Box>
+      </CardContent>
+    </Card>
   );
 }

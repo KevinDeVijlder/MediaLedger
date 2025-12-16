@@ -11,9 +11,11 @@ import AddCollection from "./components/collection/AddCollection";
 import CollectionDetail from "./components/collection/CollectionDetail";
 import Configuration from "./components/configuration";
 import Create from "./components/create";
-import Movies from "./components/displays/movies";
-import TvShows from "./components/displays/tvshows";
-import Games from "./components/displays/games";
+import Movies from "./components/displays/movie/movies";
+import TvShows from "./components/displays/tvshow/tvshows";
+import Games from "./components/displays/game/games";
+import Books from "./components/displays/book/books";
+import Boardgames from "./components/displays/boardgame/boardgames";
 
 export default function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -48,6 +50,8 @@ export default function App() {
           <Route path="/movies" element={<Movies />} />
           <Route path="/tvshows" element={<TvShows />} />
           <Route path="/games" element={<Games />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/boardgames" element={<Boardgames />} />
           <Route path="/add-item" element={<AddItem />} />
           <Route path="/collection" element={<Collection />} />
           <Route path="/add-collection" element={<AddCollection />} />

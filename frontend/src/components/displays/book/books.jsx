@@ -10,19 +10,16 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useApp } from "../../AppContext";
+import { useApp } from "../../../AppContext";
 
-export default function Games() {
+export default function Books() {
   const API = "http://localhost:3001";
   const navigate = useNavigate();
 
-  // 🔹 Global app context
   const { refreshToken, successMessage, clearSuccess } = useApp();
 
-  // 🔹 Data
   const [items, setItems] = useState([]);
 
-  // 🔄 Fetch items (runs on refreshToken change)
   useEffect(() => {
     fetch(`${API}/items`)
       .then((res) => res.json())
@@ -30,15 +27,15 @@ export default function Games() {
       .catch(() => setItems([]));
   }, [refreshToken]);
 
-  const games = items.filter((it) => it.type === "game");
+  const books = items.filter((it) => it.type === "book");
 
-  if (games.length === 0) {
+  if (books.length === 0) {
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom>
-          Games
+          Books
         </Typography>
-        <Typography>No games found.</Typography>
+        <Typography>No books found.</Typography>
       </Box>
     );
   }
@@ -46,7 +43,7 @@ export default function Games() {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Games
+        Books
       </Typography>
 
       {successMessage && (
@@ -56,7 +53,7 @@ export default function Games() {
       )}
 
       <Grid container spacing={3}>
-        {games.map((item) => (
+        {books.map((item) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <Card sx={{ cursor: "pointer" }} onClick={() => navigate(`/items/${item.id}`)}>
               {item.cover_url ? (

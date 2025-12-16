@@ -10,19 +10,16 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useApp } from "../../AppContext";
+import { useApp } from "../../../AppContext";
 
-export default function TvShows() {
+export default function Movies() {
   const API = "http://localhost:3001";
   const navigate = useNavigate();
 
-  // 🔹 Global app context
   const { refreshToken, successMessage, clearSuccess } = useApp();
 
-  // 🔹 Data
   const [items, setItems] = useState([]);
 
-  // 🔄 Fetch items (runs on refreshToken change)
   useEffect(() => {
     fetch(`${API}/items`)
       .then((res) => res.json())
@@ -30,15 +27,15 @@ export default function TvShows() {
       .catch(() => setItems([]));
   }, [refreshToken]);
 
-  const shows = items.filter((it) => it.type === "tvshow");
+  const movies = items.filter((it) => it.type === "movie");
 
-  if (shows.length === 0) {
+  if (movies.length === 0) {
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom>
-          TV Shows
+          Movies
         </Typography>
-        <Typography>No TV shows found.</Typography>
+        <Typography>No movies found.</Typography>
       </Box>
     );
   }
@@ -46,7 +43,7 @@ export default function TvShows() {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        TV Shows
+        Movies
       </Typography>
 
       {successMessage && (
@@ -56,7 +53,7 @@ export default function TvShows() {
       )}
 
       <Grid container spacing={3}>
-        {shows.map((item) => (
+        {movies.map((item) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <Card sx={{ cursor: "pointer" }} onClick={() => navigate(`/items/${item.id}`)}>
               {item.cover_url ? (
@@ -67,7 +64,15 @@ export default function TvShows() {
                   alt={item.title}
                 />
               ) : (
-                <Box sx={{ height: 200, bgcolor: "#eee", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Box
+                  sx={{
+                    height: 200,
+                    bgcolor: "#eee",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Typography variant="subtitle1">{item.title}</Typography>
                 </Box>
               )}
@@ -76,15 +81,21 @@ export default function TvShows() {
                 <Typography variant="h6">{item.title}</Typography>
 
                 {item.type && (
-                  <Typography variant="body2" color="text.secondary">Type: {item.type}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Type: {item.type}
+                  </Typography>
                 )}
 
                 {item.platform_name && (
-                  <Typography variant="body2" color="text.secondary">Platform: {item.platform_name}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Platform: {item.platform_name}
+                  </Typography>
                 )}
 
                 {item.media_type_name && (
-                  <Typography variant="body2" color="text.secondary">Media: {item.media_type_name}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Media: {item.media_type_name}
+                  </Typography>
                 )}
 
                 {item.tags?.length > 0 && (

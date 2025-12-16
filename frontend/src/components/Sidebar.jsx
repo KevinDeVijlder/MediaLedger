@@ -13,6 +13,8 @@ import {
   LocalMovies,
   Tv,
   SportsEsports,
+  MenuBook,
+  Casino,
   Tune,
   Menu,
   MenuOpen,
@@ -29,6 +31,8 @@ const navItems = [
   { label: "Movies", icon: <LocalMovies />, path: "/movies" },
   { label: "TV Shows", icon: <Tv />, path: "/tvshows" },
   { label: "Games", icon: <SportsEsports />, path: "/games" },
+  { label: "Books", icon: <MenuBook />, path: "/books" },
+  { label: "Boardgames", icon: <Casino />, path: "/boardgames" },
   { label: "Collections", icon: <BrowseGallery />, path: "/collection" },
 ];
 

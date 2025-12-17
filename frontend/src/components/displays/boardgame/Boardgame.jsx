@@ -32,7 +32,18 @@ export default function Boardgame() {
       <Box sx={{ p: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="h4">Boardgames</Typography>
-          <Button variant="contained" onClick={() => navigate("/boardgames/add")}>Add Boardgame</Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/boardgames/add")}
+            sx={{
+              bgcolor: '#FF6D00',
+              color: '#fff',
+              fontWeight: 700,
+              '&:hover': { bgcolor: '#e65a00' },
+            }}
+          >
+            Add Boardgame
+          </Button>
         </Box>
         <Typography>No boardgames found.</Typography>
       </Box>
@@ -43,7 +54,18 @@ export default function Boardgame() {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
         <Typography variant="h4">Boardgames</Typography>
-        <Button variant="contained" onClick={() => navigate("/boardgames/add")}>Add Boardgame</Button>
+        <Button
+          variant="contained"
+          onClick={() => navigate("/boardgames/add")}
+          sx={{
+            bgcolor: '#FF6D00',
+            color: '#fff',
+            fontWeight: 700,
+            '&:hover': { bgcolor: '#e65a00' },
+          }}
+        >
+          Add Boardgame
+        </Button>
       </Box>
 
       {successMessage && (
@@ -91,7 +113,7 @@ function BoardgameCard({ item, api, onClick }) {
     <Card
       onClick={onClick}
       className="boardgame-card"
-      sx={{
+      sx={(t) => ({
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
@@ -102,17 +124,15 @@ function BoardgameCard({ item, api, onClick }) {
         boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
         transition: "box-shadow 220ms, transform 180ms",
         '&:hover': {
-          boxShadow: "0 18px 40px rgba(2,6,23,0.12)",
+          boxShadow: "0 24px 60px rgba(2,6,23,0.16)",
         },
         '&:hover .complexity-badge': {
           boxShadow: '0 8px 24px rgba(255,109,0,0.32)',
           transform: 'scale(1.06)',
         },
-        '&:hover .boardgame-bottom .boardgame-underline': {
-          width: '48%',
-        },
+        // keep the card background white; emphasis via shadow/lift only
         backdropFilter: "saturate(140%) blur(6px)",
-      }}
+      })}
     >
       <Box
         sx={(t) => ({
@@ -160,7 +180,7 @@ function BoardgameCard({ item, api, onClick }) {
           <Typography variant="h6" noWrap sx={{ fontWeight: 800, letterSpacing: 0.2 }}>
             {item.name}
           </Typography>
-          <Box className="boardgame-underline" sx={{ width: 0, height: 4, background: '#FF6D00', borderRadius: 2, mt: 1, transition: 'width 260ms' }} />
+          <Box className="boardgame-underline" sx={{ display: 'none', width: 0, height: 4, background: '#FF6D00', borderRadius: 2, mt: 1, transition: 'width 260ms' }} />
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             Players: {item.min_players ?? "?"} - {item.max_players ?? "?"}

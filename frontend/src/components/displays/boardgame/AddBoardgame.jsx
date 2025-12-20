@@ -68,14 +68,14 @@ export default function AddBoardgame() {
   }, [imageFile]);
 
   return (
-    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1100, mx: 'auto' }}>
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1300, mx: 'auto' }}>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 2 }}>Add Boardgame</Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       <Box sx={{ display: 'flex', gap: { xs: 2, md: 4 }, flexDirection: { xs: 'column', md: 'row' } }}>
         <Box component="form" onSubmit={handleSubmit} sx={{ flex: 1, bgcolor: 'background.paper', p: 3, borderRadius: 2, boxShadow: 1 }}>
           <TextField fullWidth label="Name" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={name} onChange={(e) => setName(e.target.value)} />
-          <TextField fullWidth multiline rows={4} label="Description" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={description} onChange={(e) => setDescription(e.target.value)} />
+          <TextField fullWidth multiline rows={9} label="Description" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={description} onChange={(e) => setDescription(e.target.value)} />
           <TextField fullWidth label="Publisher" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={publisher} onChange={(e) => setPublisher(e.target.value)} />
 
           <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
@@ -110,16 +110,45 @@ export default function AddBoardgame() {
           </Box>
         </Box>
 
-        <Box sx={{ width: { xs: '100%', md: 360 }, display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-          <Box sx={{ width: '100%', aspectRatio: '2 / 3', borderRadius: 2, overflow: 'hidden', boxShadow: 3, bgcolor: 'grey.100', display: 'grid', placeItems: 'center' }}>
-            {previewUrl ? (
-              <img src={previewUrl} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            ) : (
+        <Box
+          sx={{
+            width: { xs: '100%', md: 560 },
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              paddingTop: '100%',
+              borderRadius: 2,
+              overflow: 'hidden',
+              boxShadow: 3,
+              bgcolor: 'grey.100',
+            }}
+          >
+           <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'grid',
+              placeItems: 'center',
+              backgroundImage: previewUrl ? `url(${previewUrl})` : 'none',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            {!previewUrl && (
               <Box sx={{ textAlign: 'center', px: 2 }}>
-                <Typography sx={{ color: 'text.secondary' }}>Cover preview</Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>Select an image to preview</Typography>
+                <Typography sx={{ color: 'text.secondary' }}>
+                  Cover preview
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+                  Select an image to preview
+                </Typography>
               </Box>
             )}
+          </Box>
           </Box>
         </Box>
       </Box>

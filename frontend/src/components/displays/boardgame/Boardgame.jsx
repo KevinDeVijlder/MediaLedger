@@ -137,7 +137,7 @@ function BoardgameCard({ item, api, onClick }) {
       <Box
         sx={(t) => ({
           width: "100%",
-          aspectRatio: "2 / 3",
+          aspectRatio: "3 / 3",
           backgroundColor: t.palette.grey[100],
           position: "relative",
           flex: "0 0 auto",
@@ -181,6 +181,10 @@ function BoardgameCard({ item, api, onClick }) {
             {item.name}
           </Typography>
           <Box className="boardgame-underline" sx={{ display: 'none', width: 0, height: 4, background: '#FF6D00', borderRadius: 2, mt: 1, transition: 'width 260ms' }} />
+
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            Publisher: {item.publisher != null ? `${item.publisher}` : "-"}
+          </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             Players: {item.min_players ?? "?"} - {item.max_players ?? "?"}

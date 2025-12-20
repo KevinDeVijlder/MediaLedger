@@ -141,3 +141,8 @@ vite.config.ts.timestamp-*
 # Uploaded images
 /backend/uploads/items/*
 /backend/uploads/collections/*
+/backend/uploads/movies/*
+/backend/uploads/tvshows/*
+/backend/uploads/games/*
+/backend/uploads/books/*
+/backend/uploads/boardgames/*

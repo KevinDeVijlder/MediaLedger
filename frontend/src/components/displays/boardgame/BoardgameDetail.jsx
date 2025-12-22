@@ -2,6 +2,9 @@ import { Box, Typography, Button, Chip, Alert, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../../../AppContext";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import WatchLaterIcon from "@mui/icons-material/WatchLater";
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 
 export default function BoardgameDetail() {
   const { id } = useParams();
@@ -175,14 +178,19 @@ export default function BoardgameDetail() {
           >
             {game.min_players != null && game.max_players != null && (
               <Chip
+                icon={<PeopleAltIcon sx={{ verticalAlign: "middle", mr: 1 }} />}
                 label={`Players: ${game.min_players}–${game.max_players}`}
               />
             )}
             {game.avg_playtime != null && (
-              <Chip label={`Playtime: ${game.avg_playtime} mins`} />
+              <Chip
+                icon={<WatchLaterIcon sx={{ verticalAlign: "middle", mr: 1 }} />}
+                label={`Playtime: ${game.avg_playtime} mins`}
+              />
             )}
             {game.complexity_weight != null && (
               <Chip
+                icon={<StarHalfIcon sx={{ verticalAlign: "middle", mr: 1 }} />}
                 label={`Complexity: ${game.complexity_weight}`}
                 color="warning"
               />

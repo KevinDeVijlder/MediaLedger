@@ -1,13 +1,23 @@
-import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Alert,
+  IconButton,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../../../AppContext";
+import Delete from "@mui/icons-material/Delete";
 
 export default function EditBoardgame() {
   const { id } = useParams();
   const navigate = useNavigate();
   const API = "http://localhost:3001";
   const { triggerRefresh, notifySuccess } = useApp();
+
+  const ACCENT = "#FF6D00";
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -17,14 +27,25 @@ export default function EditBoardgame() {
   const [avgPlaytime, setAvgPlaytime] = useState(30);
   const [complexityWeight, setComplexityWeight] = useState(1.0);
   const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [error, setError] = useState(null);
+
+  const fieldSx = {
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+      borderColor: ACCENT,
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: ACCENT,
+    },
+  };
 
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetch(`${API}/boardgames/${id}`).then((r) =>
-          r.json()
-        );
+        const data = await fetch(
+          `${API}/boardgames/${id}`
+        ).then((r) => r.json());
+
         setName(data.name || "");
         setDescription(data.description || "");
         setPublisher(data.publisher || "");
@@ -32,12 +53,21 @@ export default function EditBoardgame() {
         setMaxPlayers(data.max_players ?? 4);
         setAvgPlaytime(data.avg_playtime ?? 30);
         setComplexityWeight(data.complexity_weight ?? 1.0);
-      } catch (err) {
+
+        if (data.cover_url) {
+          setPreviewUrl(`${API}/${data.cover_url}`);
+        }
+      } catch {
         setError("Failed to load boardgame");
       }
     }
     load();
   }, [id]);
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setPreviewUrl(null);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,99 +88,235 @@ export default function EditBoardgame() {
         method: "PUT",
         body: formData,
       });
-      if (!res.ok) throw new Error("Update failed");
+      if (!res.ok) throw new Error();
 
       triggerRefresh();
       notifySuccess("Boardgame updated");
       navigate(`/boardgames/${id}`);
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Failed to update boardgame");
     }
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: 700 }}>
-      <Typography variant="h5" gutterBottom>
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1300, mx: "auto" }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
         Edit Boardgame
       </Typography>
+
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label="Name"
-          sx={{ mb: 2 }}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          label="Description"
-          sx={{ mb: 2 }}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Publisher"
-          sx={{ mb: 2 }}
-          value={publisher}
-          onChange={(e) => setPublisher(e.target.value)}
-        />
+      <Box
+        sx={{
+          display: "flex",
+          gap: { xs: 2, md: 4 },
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        {/* FORM */}
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            flex: 1,
+            bgcolor: "background.paper",
+            p: 3,
+            borderRadius: 3,
+            boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
+            overflow: "hidden",
+          }}
+        >
+          <TextField
+            fullWidth
+            label="Name"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <TextField
-            type="number"
-            label="Min players"
-            value={minPlayers}
-            onChange={(e) => setMinPlayers(e.target.value)}
+            fullWidth
+            multiline
+            rows={9}
+            label="Description"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
-          <TextField
-            type="number"
-            label="Max players"
-            value={maxPlayers}
-            onChange={(e) => setMaxPlayers(e.target.value)}
-          />
-          <TextField
-            type="number"
-            label="Avg playtime (mins)"
-            value={avgPlaytime}
-            onChange={(e) => setAvgPlaytime(e.target.value)}
-          />
-          <TextField
-            type="number"
-            label="Complexity"
-            value={complexityWeight}
-            onChange={(e) => setComplexityWeight(e.target.value)}
-          />
-        </Box>
 
-        <Box sx={{ mb: 3 }}>
-          <Button variant="contained" component="label">
-            Upload Cover
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+          <TextField
+            fullWidth
+            label="Publisher"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={publisher}
+            onChange={(e) => setPublisher(e.target.value)}
+          />
+
+          <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+            <TextField
+              type="number"
+              label="Min players"
+              size="small"
+              sx={{ flex: "1 1 100px", ...fieldSx }}
+              value={minPlayers}
+              onChange={(e) => setMinPlayers(e.target.value)}
             />
-          </Button>
+            <TextField
+              type="number"
+              label="Max players"
+              size="small"
+              sx={{ flex: "1 1 100px", ...fieldSx }}
+              value={maxPlayers}
+              onChange={(e) => setMaxPlayers(e.target.value)}
+            />
+            <TextField
+              type="number"
+              label="Avg playtime (mins)"
+              size="small"
+              sx={{ flex: "1 1 140px", ...fieldSx }}
+              value={avgPlaytime}
+              onChange={(e) => setAvgPlaytime(e.target.value)}
+            />
+            <TextField
+              type="number"
+              label="Complexity"
+              size="small"
+              sx={{ flex: "1 1 110px", ...fieldSx }}
+              value={complexityWeight}
+              onChange={(e) =>
+                setComplexityWeight(e.target.value)
+              }
+            />
+          </Box>
+
+          {/* UPLOAD + REMOVE */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              mb: 3,
+              flexWrap: "wrap",
+            }}
+          >
+            <Button
+              variant="contained"
+              component="label"
+              sx={{
+                bgcolor: ACCENT,
+                "&:hover": { bgcolor: "#e65a00" },
+                color: "#fff",
+              }}
+            >
+              Upload Cover
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) =>
+                  setImageFile(e.target.files?.[0] ?? null)
+                }
+              />
+            </Button>
+
+            {previewUrl && (
+              <IconButton
+                size="small"
+                onClick={handleRemoveImage}
+                sx={{ color: ACCENT }}
+              >
+                <Delete fontSize="small" />
+              </IconButton>
+            )}
+          </Box>
+
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                bgcolor: ACCENT,
+                "&:hover": { bgcolor: "#e65a00" },
+                color: "#fff",
+              }}
+            >
+              Save Changes
+            </Button>
+
+            <Button
+              type="button"
+              variant="outlined"
+              onClick={() => navigate(-1)}
+              sx={{
+                borderColor: ACCENT,
+                color: ACCENT,
+                "&:hover": {
+                  backgroundColor:
+                    "rgba(255,109,0,0.08)",
+                  borderColor: ACCENT,
+                },
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
 
-        <Button type="submit" variant="contained" sx={{ mr: 2 }}>
-          Save
-        </Button>
-        <Button variant="outlined" onClick={() => navigate(-1)}>
-          Cancel
-        </Button>
-      </form>
+        {/* PREVIEW */}
+        <Box sx={{ width: { xs: "100%", md: 560 } }}>
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              paddingTop: "100%",
+              borderRadius: 3,
+              overflow: "hidden",
+              bgcolor: "rgba(2,6,23,0.15)",
+              boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
+            }}
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                display: "grid",
+                placeItems: "center",
+                backgroundImage: previewUrl
+                  ? `url(${previewUrl})`
+                  : "none",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {!previewUrl && (
+                <Box sx={{ textAlign: "center", px: 2 }}>
+                  <Typography
+                    sx={{ color: "text.secondary" }}
+                  >
+                    Cover preview
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                      mt: 1,
+                    }}
+                  >
+                    Upload a new image to replace
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

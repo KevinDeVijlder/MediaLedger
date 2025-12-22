@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Chip, Alert } from "@mui/material";
+import { Box, Typography, Button, Chip, Alert, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../../../AppContext";
@@ -12,6 +12,8 @@ export default function BoardgameDetail() {
   const [game, setGame] = useState(null);
   const [error, setError] = useState(null);
 
+  const ACCENT = "#FF6D00";
+
   useEffect(() => {
     async function load() {
       try {
@@ -19,7 +21,7 @@ export default function BoardgameDetail() {
           r.json()
         );
         setGame(data);
-      } catch (err) {
+      } catch {
         setError("Failed to load boardgame");
       }
     }
@@ -29,14 +31,15 @@ export default function BoardgameDetail() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this boardgame?")) return;
     try {
-      const res = await fetch(`${API}/boardgames/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
+      const res = await fetch(`${API}/boardgames/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error();
 
       triggerRefresh();
       notifySuccess("Boardgame deleted");
       navigate("/boardgames");
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Failed to delete boardgame");
     }
   };
@@ -47,60 +50,161 @@ export default function BoardgameDetail() {
         {error ? (
           <Alert severity="error">{error}</Alert>
         ) : (
-          <Typography>Loading...</Typography>
+          <Typography>Loading…</Typography>
         )}
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1300, mx: "auto" }}>
+      {/* HEADER */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
+          alignItems: "flex-start",
+          gap: 2,
+          mb: 3,
+          flexWrap: "wrap",
         }}
       >
-        <Typography variant="h4">{game.name}</Typography>
         <Box>
+          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+            {game.name}
+          </Typography>
+          {game.publisher && (
+            <Typography sx={{ color: "text.secondary", mt: 0.5 }}>
+              Published by {game.publisher}
+            </Typography>
+          )}
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Button
             variant="contained"
-            sx={{ mr: 1 }}
             onClick={() => navigate(`/boardgames/${id}/edit`)}
+            sx={{
+              bgcolor: "#FF6D00",
+              "&:hover": { bgcolor: "#e65a00" },
+            }}
           >
             Edit
           </Button>
-          <Button variant="contained" color="error" onClick={handleDelete}>
+          <Button
+            type="button"
+            variant="outlined"
+            onClick={handleDelete}
+            sx={{
+              borderColor: ACCENT,
+              color: ACCENT,
+              "&:hover": {
+                backgroundColor: "rgba(255,109,0,0.08)",
+                borderColor: ACCENT,
+              },
+            }}
+          >
             Delete
           </Button>
         </Box>
       </Box>
 
-      {game.cover_url && (
-        <img
-          src={`${API}/${game.cover_url}`}
-          alt={game.name}
-          style={{ maxWidth: 300, display: "block", marginBottom: 16 }}
-        />
-      )}
+      {/* MAIN CARD */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: { xs: 3, md: 4 },
+          flexDirection: { xs: "column", md: "row" },
+          bgcolor: "background.paper",
+          borderRadius: 3,
+          boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
+          p: { xs: 2, md: 3 },
+        }}
+      >
+        {/* COVER */}
+        <Box sx={{ width: { xs: "100%", md: 360 } }}>
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              paddingTop: "100%",
+              borderRadius: 3,
+              overflow: "hidden",
+              bgcolor: "rgba(2,6,23,0.15)",
+              boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
+            }}
+          >
+            {game.cover_url ? (
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: `url(${API}/${game.cover_url})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "grid",
+                  placeItems: "center",
+                  px: 2,
+                }}
+              >
+                <Typography sx={{ color: "text.secondary" }}>
+                  No cover image
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Box>
 
-      <Typography variant="subtitle1" gutterBottom>
-        {game.description}
-      </Typography>
+        {/* DETAILS */}
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          {/* META */}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1,
+              mb: 2,
+            }}
+          >
+            {game.min_players != null && game.max_players != null && (
+              <Chip
+                label={`Players: ${game.min_players}–${game.max_players}`}
+              />
+            )}
+            {game.avg_playtime != null && (
+              <Chip label={`Playtime: ${game.avg_playtime} mins`} />
+            )}
+            {game.complexity_weight != null && (
+              <Chip
+                label={`Complexity: ${game.complexity_weight}`}
+                color="warning"
+              />
+            )}
+          </Box>
 
-      {game.publisher && <Typography>Publisher: {game.publisher}</Typography>}
-      {game.min_players != null && game.max_players != null && (
-        <Typography>
-          Players: {game.min_players} - {game.max_players}
-        </Typography>
-      )}
-      {game.avg_playtime != null && (
-        <Typography>Avg playtime: {game.avg_playtime} mins</Typography>
-      )}
-      {game.complexity_weight != null && (
-        <Typography>Complexity: {game.complexity_weight}</Typography>
+          <Divider sx={{ mb: 2 }} />
+
+          {/* DESCRIPTION */}
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+            Description
+          </Typography>
+          <Typography sx={{ color: "text.secondary", lineHeight: 1.6 }}>
+            {game.description || "No description provided."}
+          </Typography>
+        </Box>
+      </Box>
+
+      {error && (
+        <Alert severity="error" sx={{ mt: 3 }}>
+          {error}
+        </Alert>
       )}
     </Box>
   );

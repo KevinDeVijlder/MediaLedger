@@ -16,7 +16,8 @@ import { useApp } from "../../../AppContext";
 export default function Boardgame() {
   const API = "http://localhost:3001";
   const navigate = useNavigate();
-  const { refreshToken, triggerRefresh, successMessage, notifySuccess } = useApp();
+  const { refreshToken, triggerRefresh, successMessage, notifySuccess } =
+    useApp();
 
   const [items, setItems] = useState([]);
 
@@ -30,16 +31,23 @@ export default function Boardgame() {
   if (items.length === 0) {
     return (
       <Box sx={{ p: 3 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
           <Typography variant="h4">Boardgames</Typography>
           <Button
             variant="contained"
             onClick={() => navigate("/boardgames/add")}
             sx={{
-              bgcolor: '#FF6D00',
-              color: '#fff',
+              bgcolor: "#FF6D00",
+              color: "#fff",
               fontWeight: 700,
-              '&:hover': { bgcolor: '#e65a00' },
+              "&:hover": { bgcolor: "#e65a00" },
             }}
           >
             Add Boardgame
@@ -52,16 +60,23 @@ export default function Boardgame() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
         <Typography variant="h4">Boardgames</Typography>
         <Button
           variant="contained"
           onClick={() => navigate("/boardgames/add")}
           sx={{
-            bgcolor: '#FF6D00',
-            color: '#fff',
+            bgcolor: "#FF6D00",
+            color: "#fff",
             fontWeight: 700,
-            '&:hover': { bgcolor: '#e65a00' },
+            "&:hover": { bgcolor: "#e65a00" },
           }}
         >
           Add Boardgame
@@ -88,8 +103,12 @@ export default function Boardgame() {
         }}
       >
         {items.map((item) => (
-          <Box key={item.id} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <BoardgameCard item={item} api={API} onClick={() => navigate(`/boardgames/${item.id}`)} />
+          <Box key={item.id} sx={{ display: "flex", justifyContent: "center" }}>
+            <BoardgameCard
+              item={item}
+              api={API}
+              onClick={() => navigate(`/boardgames/${item.id}`)}
+            />
           </Box>
         ))}
       </Box>
@@ -117,18 +136,18 @@ function BoardgameCard({ item, api, onClick }) {
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
-        width: '100%',
+        width: "100%",
         height: 420,
         borderRadius: 3,
         overflow: "hidden",
         boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
         transition: "box-shadow 220ms, transform 180ms",
-        '&:hover': {
+        "&:hover": {
           boxShadow: "0 24px 60px rgba(2,6,23,0.16)",
         },
-        '&:hover .complexity-badge': {
-          boxShadow: '0 8px 24px rgba(255,109,0,0.32)',
-          transform: 'scale(1.06)',
+        "&:hover .complexity-badge": {
+          boxShadow: "0 8px 24px rgba(255,109,0,0.32)",
+          transform: "scale(1.06)",
         },
         // keep the card background white; emphasis via shadow/lift only
         backdropFilter: "saturate(140%) blur(6px)",
@@ -144,8 +163,18 @@ function BoardgameCard({ item, api, onClick }) {
         })}
       >
         {/* Complexity badge */}
-        <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 5 }}>
-          <Chip className="complexity-badge" label={item.complexity_weight ?? '-'} size="small" color={getBadgeColor(item.complexity_weight)} sx={{ color: '#fff', fontWeight: 800, transition: 'box-shadow 220ms, transform 220ms' }} />
+        <Box sx={{ position: "absolute", top: 8, right: 8, zIndex: 5 }}>
+          <Chip
+            className="complexity-badge"
+            label={item.complexity_weight ?? "-"}
+            size="small"
+            color={getBadgeColor(item.complexity_weight)}
+            sx={{
+              color: "#fff",
+              fontWeight: 800,
+              transition: "box-shadow 220ms, transform 220ms",
+            }}
+          />
         </Box>
         {item.cover_url ? (
           <CardMedia
@@ -167,7 +196,13 @@ function BoardgameCard({ item, api, onClick }) {
               color: (t) => t.palette.text.secondary,
             }}
           >
-            <Box sx={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05))` }} />
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                background: `linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05))`,
+              }}
+            />
             <Typography variant="h6" sx={{ zIndex: 1 }}>
               {item.name}
             </Typography>
@@ -175,12 +210,38 @@ function BoardgameCard({ item, api, onClick }) {
         )}
       </Box>
 
-      <CardContent className="boardgame-bottom" sx={{ flex: "0 0 160px", py: 2.5, overflow: "hidden", display: 'flex', flexDirection: 'column', justifyContent: 'center', transition: 'background 240ms' }}>
+      <CardContent
+        className="boardgame-bottom"
+        sx={{
+          flex: "0 0 160px",
+          py: 2.5,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          transition: "background 240ms",
+        }}
+      >
         <Box>
-          <Typography variant="h6" noWrap sx={{ fontWeight: 800, letterSpacing: 0.2 }}>
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{ fontWeight: 800, letterSpacing: 0.2 }}
+          >
             {item.name}
           </Typography>
-          <Box className="boardgame-underline" sx={{ display: 'none', width: 0, height: 4, background: '#FF6D00', borderRadius: 2, mt: 1, transition: 'width 260ms' }} />
+          <Box
+            className="boardgame-underline"
+            sx={{
+              display: "none",
+              width: 0,
+              height: 4,
+              background: "#FF6D00",
+              borderRadius: 2,
+              mt: 1,
+              transition: "width 260ms",
+            }}
+          />
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             Publisher: {item.publisher != null ? `${item.publisher}` : "-"}
@@ -191,7 +252,8 @@ function BoardgameCard({ item, api, onClick }) {
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Avg playtime: {item.avg_playtime != null ? `${item.avg_playtime} mins` : "-"}
+            Avg playtime:{" "}
+            {item.avg_playtime != null ? `${item.avg_playtime} mins` : "-"}
           </Typography>
 
           {/* complexity shown as top-right badge only */}

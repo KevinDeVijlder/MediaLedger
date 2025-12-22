@@ -23,8 +23,8 @@ export default function AddBoardgame() {
 
   const [previewUrl, setPreviewUrl] = useState(null);
   const fieldSx = {
-    '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: ACCENT },
-    '& .MuiInputLabel-root.Mui-focused': { color: ACCENT },
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": { borderColor: ACCENT },
+    "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   };
 
   const handleSubmit = async (e) => {
@@ -44,7 +44,10 @@ export default function AddBoardgame() {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const res = await fetch(`${API}/boardgames`, { method: "POST", body: formData });
+      const res = await fetch(`${API}/boardgames`, {
+        method: "POST",
+        body: formData,
+      });
       if (!res.ok) throw new Error("Create failed");
 
       triggerRefresh();
@@ -68,41 +71,152 @@ export default function AddBoardgame() {
   }, [imageFile]);
 
   return (
-    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1300, mx: 'auto' }}>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 2 }}>Add Boardgame</Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1300, mx: "auto" }}>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 2 }}>
+        Add Boardgame
+      </Typography>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-      <Box sx={{ display: 'flex', gap: { xs: 2, md: 4 }, flexDirection: { xs: 'column', md: 'row' } }}>
-        <Box component="form" onSubmit={handleSubmit} sx={{ flex: 1, bgcolor: 'background.paper', p: 3, borderRadius: 2, boxShadow: 1 }}>
-          <TextField fullWidth label="Name" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={name} onChange={(e) => setName(e.target.value)} />
-          <TextField fullWidth multiline rows={9} label="Description" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={description} onChange={(e) => setDescription(e.target.value)} />
-          <TextField fullWidth label="Publisher" variant="outlined" size="small" sx={{ mb: 2, ...fieldSx }} value={publisher} onChange={(e) => setPublisher(e.target.value)} />
+      <Box
+        sx={{
+          display: "flex",
+          gap: { xs: 2, md: 4 },
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            flex: 1,
+            bgcolor: "background.paper",
+            p: 3,
+            borderRadius: 3,
+            boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
+            overflow: "hidden",
+          }}
+        >
+          <TextField
+            fullWidth
+            label="Name"
+            variant="outlined"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            multiline
+            rows={9}
+            label="Description"
+            variant="outlined"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Publisher"
+            variant="outlined"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={publisher}
+            onChange={(e) => setPublisher(e.target.value)}
+          />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-            <TextField type="number" label="Min players" variant="outlined" size="small" sx={{ flex: '1 1 100px', ...fieldSx }} value={minPlayers} onChange={(e) => setMinPlayers(e.target.value)} />
-            <TextField type="number" label="Max players" variant="outlined" size="small" sx={{ flex: '1 1 100px', ...fieldSx }} value={maxPlayers} onChange={(e) => setMaxPlayers(e.target.value)} />
-            <TextField type="number" label="Avg playtime (mins)" variant="outlined" size="small" sx={{ flex: '1 1 140px', ...fieldSx }} value={avgPlaytime} onChange={(e) => setAvgPlaytime(e.target.value)} />
-            <TextField type="number" label="Complexity" variant="outlined" size="small" sx={{ flex: '1 1 110px', ...fieldSx }} value={complexityWeight} onChange={(e) => setComplexityWeight(e.target.value)} />
+          <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+            <TextField
+              type="number"
+              label="Min players"
+              variant="outlined"
+              size="small"
+              sx={{ flex: "1 1 100px", ...fieldSx }}
+              value={minPlayers}
+              onChange={(e) => setMinPlayers(e.target.value)}
+            />
+            <TextField
+              type="number"
+              label="Max players"
+              variant="outlined"
+              size="small"
+              sx={{ flex: "1 1 100px", ...fieldSx }}
+              value={maxPlayers}
+              onChange={(e) => setMaxPlayers(e.target.value)}
+            />
+            <TextField
+              type="number"
+              label="Avg playtime (mins)"
+              variant="outlined"
+              size="small"
+              sx={{ flex: "1 1 140px", ...fieldSx }}
+              value={avgPlaytime}
+              onChange={(e) => setAvgPlaytime(e.target.value)}
+            />
+            <TextField
+              type="number"
+              label="Complexity"
+              variant="outlined"
+              size="small"
+              sx={{ flex: "1 1 110px", ...fieldSx }}
+              value={complexityWeight}
+              onChange={(e) => setComplexityWeight(e.target.value)}
+            />
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <Button variant="contained" component="label" sx={{ bgcolor: ACCENT, '&:hover': { bgcolor: '#e65a00' }, color: '#fff' }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+            <Button
+              variant="contained"
+              component="label"
+              sx={{
+                bgcolor: ACCENT,
+                "&:hover": { bgcolor: "#e65a00" },
+                color: "#fff",
+              }}
+            >
               Upload Cover
-              <input type="file" accept="image/*" hidden onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} />
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+              />
             </Button>
-            {imageFile && <Typography variant="body2" sx={{ color: 'text.secondary' }}>{imageFile.name}</Typography>}
+            {imageFile && (
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {imageFile.name}
+              </Typography>
+            )}
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button type="submit" variant="contained" sx={{ bgcolor: ACCENT, '&:hover': { bgcolor: '#e65a00' }, color: '#fff' }}>Save Boardgame</Button>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                bgcolor: ACCENT,
+                "&:hover": { bgcolor: "#e65a00" },
+                color: "#fff",
+              }}
+            >
+              Save Boardgame
+            </Button>
             <Button
               type="button"
               variant="outlined"
-              onClick={() => navigate('/boardgames')}
+              onClick={() => navigate("/boardgames")}
               sx={{
                 borderColor: ACCENT,
                 color: ACCENT,
-                '&:hover': { backgroundColor: 'rgba(255,109,0,0.08)', borderColor: ACCENT },
+                "&:hover": {
+                  backgroundColor: "rgba(255,109,0,0.08)",
+                  borderColor: ACCENT,
+                },
               }}
             >
               Cancel
@@ -112,43 +226,46 @@ export default function AddBoardgame() {
 
         <Box
           sx={{
-            width: { xs: '100%', md: 560 },
+            width: { xs: "100%", md: 560 },
           }}
         >
           <Box
             sx={{
-              position: 'relative',
-              width: '100%',
-              paddingTop: '100%',
-              borderRadius: 2,
-              overflow: 'hidden',
-              boxShadow: 3,
-              bgcolor: 'grey.100',
+              position: "relative",
+              width: "100%",
+              paddingTop: "100%",
+              borderRadius: 3,
+              overflow: "hidden",
+              bgcolor: "rgba(2,6,23,0.15)",
+              boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
             }}
           >
-           <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              display: 'grid',
-              placeItems: 'center',
-              backgroundImage: previewUrl ? `url(${previewUrl})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }}
-          >
-            {!previewUrl && (
-              <Box sx={{ textAlign: 'center', px: 2 }}>
-                <Typography sx={{ color: 'text.secondary' }}>
-                  Cover preview
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-                  Select an image to preview
-                </Typography>
-              </Box>
-            )}
-          </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                display: "grid",
+                placeItems: "center",
+                backgroundImage: previewUrl ? `url(${previewUrl})` : "none",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              {!previewUrl && (
+                <Box sx={{ textAlign: "center", px: 2 }}>
+                  <Typography sx={{ color: "text.secondary" }}>
+                    Cover preview
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mt: 1 }}
+                  >
+                    Select an image to preview
+                  </Typography>
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>

@@ -22,7 +22,9 @@ export default function EditBoardgame() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetch(`${API}/boardgames/${id}`).then((r) => r.json());
+        const data = await fetch(`${API}/boardgames/${id}`).then((r) =>
+          r.json()
+        );
         setName(data.name || "");
         setDescription(data.description || "");
         setPublisher(data.publisher || "");
@@ -52,7 +54,10 @@ export default function EditBoardgame() {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const res = await fetch(`${API}/boardgames/${id}`, { method: "PUT", body: formData });
+      const res = await fetch(`${API}/boardgames/${id}`, {
+        method: "PUT",
+        body: formData,
+      });
       if (!res.ok) throw new Error("Update failed");
 
       triggerRefresh();
@@ -66,27 +71,85 @@ export default function EditBoardgame() {
 
   return (
     <Box sx={{ p: 3, maxWidth: 700 }}>
-      <Typography variant="h5" gutterBottom>Edit Boardgame</Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      <Typography variant="h5" gutterBottom>
+        Edit Boardgame
+      </Typography>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       <form onSubmit={handleSubmit}>
-        <TextField fullWidth label="Name" sx={{ mb: 2 }} value={name} onChange={(e) => setName(e.target.value)} />
-        <TextField fullWidth multiline rows={4} label="Description" sx={{ mb: 2 }} value={description} onChange={(e) => setDescription(e.target.value)} />
-        <TextField fullWidth label="Publisher" sx={{ mb: 2 }} value={publisher} onChange={(e) => setPublisher(e.target.value)} />
+        <TextField
+          fullWidth
+          label="Name"
+          sx={{ mb: 2 }}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          label="Description"
+          sx={{ mb: 2 }}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Publisher"
+          sx={{ mb: 2 }}
+          value={publisher}
+          onChange={(e) => setPublisher(e.target.value)}
+        />
 
         <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-          <TextField type="number" label="Min players" value={minPlayers} onChange={(e) => setMinPlayers(e.target.value)} />
-          <TextField type="number" label="Max players" value={maxPlayers} onChange={(e) => setMaxPlayers(e.target.value)} />
-          <TextField type="number" label="Avg playtime (mins)" value={avgPlaytime} onChange={(e) => setAvgPlaytime(e.target.value)} />
-          <TextField type="number" label="Complexity" value={complexityWeight} onChange={(e) => setComplexityWeight(e.target.value)} />
+          <TextField
+            type="number"
+            label="Min players"
+            value={minPlayers}
+            onChange={(e) => setMinPlayers(e.target.value)}
+          />
+          <TextField
+            type="number"
+            label="Max players"
+            value={maxPlayers}
+            onChange={(e) => setMaxPlayers(e.target.value)}
+          />
+          <TextField
+            type="number"
+            label="Avg playtime (mins)"
+            value={avgPlaytime}
+            onChange={(e) => setAvgPlaytime(e.target.value)}
+          />
+          <TextField
+            type="number"
+            label="Complexity"
+            value={complexityWeight}
+            onChange={(e) => setComplexityWeight(e.target.value)}
+          />
         </Box>
 
         <Box sx={{ mb: 3 }}>
-          <Button variant="contained" component="label">Upload Cover<input type="file" accept="image/*" hidden onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} /></Button>
+          <Button variant="contained" component="label">
+            Upload Cover
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+            />
+          </Button>
         </Box>
 
-        <Button type="submit" variant="contained" sx={{ mr: 2 }}>Save</Button>
-        <Button variant="outlined" onClick={() => navigate(-1)}>Cancel</Button>
+        <Button type="submit" variant="contained" sx={{ mr: 2 }}>
+          Save
+        </Button>
+        <Button variant="outlined" onClick={() => navigate(-1)}>
+          Cancel
+        </Button>
       </form>
     </Box>
   );

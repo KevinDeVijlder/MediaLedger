@@ -15,7 +15,9 @@ export default function BoardgameDetail() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetch(`${API}/boardgames/${id}`).then((r) => r.json());
+        const data = await fetch(`${API}/boardgames/${id}`).then((r) =>
+          r.json()
+        );
         setGame(data);
       } catch (err) {
         setError("Failed to load boardgame");
@@ -42,29 +44,64 @@ export default function BoardgameDetail() {
   if (!game) {
     return (
       <Box sx={{ p: 3 }}>
-        {error ? <Alert severity="error">{error}</Alert> : <Typography>Loading...</Typography>}
+        {error ? (
+          <Alert severity="error">{error}</Alert>
+        ) : (
+          <Typography>Loading...</Typography>
+        )}
       </Box>
     );
   }
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
         <Typography variant="h4">{game.name}</Typography>
         <Box>
-          <Button variant="contained" sx={{ mr: 1 }} onClick={() => navigate(`/boardgames/${id}/edit`)}>Edit</Button>
-          <Button variant="contained" color="error" onClick={handleDelete}>Delete</Button>
+          <Button
+            variant="contained"
+            sx={{ mr: 1 }}
+            onClick={() => navigate(`/boardgames/${id}/edit`)}
+          >
+            Edit
+          </Button>
+          <Button variant="contained" color="error" onClick={handleDelete}>
+            Delete
+          </Button>
         </Box>
       </Box>
 
-      {game.cover_url && <img src={`${API}/${game.cover_url}`} alt={game.name} style={{ maxWidth: 300, display: "block", marginBottom: 16 }} />}
+      {game.cover_url && (
+        <img
+          src={`${API}/${game.cover_url}`}
+          alt={game.name}
+          style={{ maxWidth: 300, display: "block", marginBottom: 16 }}
+        />
+      )}
 
-      <Typography variant="subtitle1" gutterBottom>{game.description}</Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        {game.description}
+      </Typography>
 
       {game.publisher && <Typography>Publisher: {game.publisher}</Typography>}
-      {game.min_players != null && game.max_players != null && <Typography>Players: {game.min_players} - {game.max_players}</Typography>}
-      {game.avg_playtime != null && <Typography>Avg playtime: {game.avg_playtime} mins</Typography>}
-      {game.complexity_weight != null && <Typography>Complexity: {game.complexity_weight}</Typography>}
+      {game.min_players != null && game.max_players != null && (
+        <Typography>
+          Players: {game.min_players} - {game.max_players}
+        </Typography>
+      )}
+      {game.avg_playtime != null && (
+        <Typography>Avg playtime: {game.avg_playtime} mins</Typography>
+      )}
+      {game.complexity_weight != null && (
+        <Typography>Complexity: {game.complexity_weight}</Typography>
+      )}
     </Box>
   );
 }

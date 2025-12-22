@@ -1,8 +1,9 @@
-import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import { Box, Button, TextField, Typography, Alert, IconButton } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../AppContext";
 import { useTheme } from "@mui/material/styles";
+import Delete from "@mui/icons-material/Delete";
 
 export default function AddBoardgame() {
   const [name, setName] = useState("");
@@ -22,9 +23,15 @@ export default function AddBoardgame() {
   const ACCENT = "#FF6D00";
 
   const [previewUrl, setPreviewUrl] = useState(null);
+
   const fieldSx = {
     "& .MuiOutlinedInput-root.Mui-focused fieldset": { borderColor: ACCENT },
     "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setPreviewUrl(null);
   };
 
   const handleSubmit = async (e) => {
@@ -75,6 +82,7 @@ export default function AddBoardgame() {
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 2 }}>
         Add Boardgame
       </Typography>
+
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
@@ -88,6 +96,7 @@ export default function AddBoardgame() {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
+        {/* FORM */}
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -103,27 +112,26 @@ export default function AddBoardgame() {
           <TextField
             fullWidth
             label="Name"
-            variant="outlined"
             size="small"
             sx={{ mb: 2, ...fieldSx }}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+
           <TextField
             fullWidth
             multiline
             rows={9}
             label="Description"
-            variant="outlined"
             size="small"
             sx={{ mb: 2, ...fieldSx }}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+
           <TextField
             fullWidth
             label="Publisher"
-            variant="outlined"
             size="small"
             sx={{ mb: 2, ...fieldSx }}
             value={publisher}
@@ -134,7 +142,6 @@ export default function AddBoardgame() {
             <TextField
               type="number"
               label="Min players"
-              variant="outlined"
               size="small"
               sx={{ flex: "1 1 100px", ...fieldSx }}
               value={minPlayers}
@@ -143,7 +150,6 @@ export default function AddBoardgame() {
             <TextField
               type="number"
               label="Max players"
-              variant="outlined"
               size="small"
               sx={{ flex: "1 1 100px", ...fieldSx }}
               value={maxPlayers}
@@ -152,7 +158,6 @@ export default function AddBoardgame() {
             <TextField
               type="number"
               label="Avg playtime (mins)"
-              variant="outlined"
               size="small"
               sx={{ flex: "1 1 140px", ...fieldSx }}
               value={avgPlaytime}
@@ -161,7 +166,6 @@ export default function AddBoardgame() {
             <TextField
               type="number"
               label="Complexity"
-              variant="outlined"
               size="small"
               sx={{ flex: "1 1 110px", ...fieldSx }}
               value={complexityWeight}
@@ -169,7 +173,16 @@ export default function AddBoardgame() {
             />
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          {/* UPLOAD + REMOVE ICON */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              mb: 3,
+              flexWrap: "wrap",
+            }}
+          >
             <Button
               variant="contained"
               component="label"
@@ -184,13 +197,28 @@ export default function AddBoardgame() {
                 type="file"
                 accept="image/*"
                 hidden
-                onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+                onChange={(e) =>
+                  setImageFile(e.target.files?.[0] ?? null)
+                }
               />
             </Button>
+
             {imageFile && (
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {imageFile.name}
-              </Typography>
+              <>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {imageFile.name}
+                </Typography>
+
+                <IconButton
+                  size="small"
+                  onClick={handleRemoveImage}
+                  sx={{
+                    color: ACCENT,
+                  }}
+                >
+                  <Delete fontSize="small" />
+                </IconButton>
+              </>
             )}
           </Box>
 
@@ -206,6 +234,7 @@ export default function AddBoardgame() {
             >
               Save Boardgame
             </Button>
+
             <Button
               type="button"
               variant="outlined"
@@ -224,11 +253,8 @@ export default function AddBoardgame() {
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            width: { xs: "100%", md: 560 },
-          }}
-        >
+        {/* PREVIEW */}
+        <Box sx={{ width: { xs: "100%", md: 560 } }}>
           <Box
             sx={{
               position: "relative",
@@ -249,7 +275,6 @@ export default function AddBoardgame() {
                 backgroundImage: previewUrl ? `url(${previewUrl})` : "none",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
               }}
             >
               {!previewUrl && (

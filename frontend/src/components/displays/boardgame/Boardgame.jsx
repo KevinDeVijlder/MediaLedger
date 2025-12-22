@@ -118,7 +118,7 @@ function BoardgameCard({ item, api, onClick }) {
         display: "flex",
         flexDirection: "column",
         width: '100%',
-        height: 520,
+        height: 420,
         borderRadius: 3,
         overflow: "hidden",
         boxShadow: "0 8px 22px rgba(2,6,23,0.10)",

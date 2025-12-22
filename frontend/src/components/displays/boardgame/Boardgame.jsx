@@ -13,6 +13,10 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../AppContext";
 
+import FactoryIcon from '@mui/icons-material/Factory';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import WatchLaterIcon from '@mui/icons-material/WatchLater';
+
 export default function Boardgame() {
   const API = "http://localhost:3001";
   const navigate = useNavigate();
@@ -244,15 +248,15 @@ function BoardgameCard({ item, api, onClick }) {
           />
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Publisher: {item.publisher != null ? `${item.publisher}` : "-"}
+            <FactoryIcon sx={{ verticalAlign: "middle", mr: 1 }} /> Publisher: {item.publisher != null ? `${item.publisher}` : "-"}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Players: {item.min_players ?? "?"} - {item.max_players ?? "?"}
+            <PeopleAltIcon sx={{ verticalAlign: "middle", mr: 1 }} /> Players: {item.min_players ?? "?"} - {item.max_players ?? "?"}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Avg playtime:{" "}
+            <WatchLaterIcon sx={{ verticalAlign: "middle", mr: 1 }} /> Avg playtime:{" "}
             {item.avg_playtime != null ? `${item.avg_playtime} mins` : "-"}
           </Typography>
 

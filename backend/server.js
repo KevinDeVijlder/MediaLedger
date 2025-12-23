@@ -3,12 +3,9 @@ import cors from "cors";
 import { initializeDatabase } from "./schema.js";
 
 // Import routers
-import platformsRouter from "./routes/platforms.js";
-import mediaTypesRouter from "./routes/mediaTypes.js";
-import tagsRouter from "./routes/tags.js";
 import collectionsRouter from "./routes/collections.js";
-import itemsRouter from "./routes/items.js";
 import boardgamesRouter from "./routes/boardgames.js";
+import booksRouter from "./routes/books.js";
 
 
 
@@ -18,13 +15,9 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 // Route assignments:
-app.use("/platforms", platformsRouter);
-app.use("/media-types", mediaTypesRouter);
-app.use("/tags", tagsRouter);
 app.use("/collections", collectionsRouter);
-app.use("/items", itemsRouter);
 app.use("/boardgames", boardgamesRouter);
-
+app.use("/books", booksRouter);
 // initialize DB schema
 initializeDatabase();
 

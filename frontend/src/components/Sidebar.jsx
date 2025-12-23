@@ -7,9 +7,6 @@ import {
   Box,
 } from "@mui/material";
 import {
-  Home,
-  Widgets,
-  BrowseGallery,
   LocalMovies,
   Tv,
   SportsEsports,
@@ -18,22 +15,21 @@ import {
   Tune,
   Menu,
   MenuOpen,
-  AddCircle,
 } from "@mui/icons-material";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CollectionsIcon from '@mui/icons-material/Collections';
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
 import Logo from '../assets/logosmall.png'; // your logo path
 import 'typeface-ubuntu';
 
 const navItems = [
-  { label: "Dashboard", icon: <Home />, path: "/" },
-  { label: "Items", icon: <Widgets />, path: "/item" },
+  { label: "Dashboard", icon: <DashboardIcon />, path: "/" },
   { label: "Movies", icon: <LocalMovies />, path: "/movies" },
   { label: "TV Shows", icon: <Tv />, path: "/tvshows" },
   { label: "Games", icon: <SportsEsports />, path: "/games" },
   { label: "Books", icon: <MenuBook />, path: "/books" },
   { label: "Boardgames", icon: <Casino />, path: "/boardgames" },
-  { label: "Collections", icon: <BrowseGallery />, path: "/collection" },
+  {label: "Collections", icon: <CollectionsIcon />, path: "/collection" },
 ];
 
 export default function Sidebar({ isExpanded, onToggle }) {

@@ -12,41 +12,25 @@ export function initializeDatabase() {
       );
     `);
 
-    // Platforms
+    // Books
     db.run(`
-      CREATE TABLE IF NOT EXISTS platforms (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
-      );
-    `);
-
-    // Media Types
-    db.run(`
-      CREATE TABLE IF NOT EXISTS media_types (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
-      );
-    `);
-
-    // Tags
-    db.run(`
-      CREATE TABLE IF NOT EXISTS tags (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
-      );
-    `);
-
-    // Items
-    db.run(`
-      CREATE TABLE IF NOT EXISTS items (
+      CREATE TABLE IF NOT EXISTS books (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
-        type TEXT CHECK(type IN ('movie','tvshow','game')) NOT NULL,
-        platform_id INTEGER,
-        media_type_id INTEGER,
+        subtitle TEXT,
+        description TEXT,
         cover_url TEXT,
-        FOREIGN KEY(platform_id) REFERENCES platforms(id),
-        FOREIGN KEY(media_type_id) REFERENCES media_types(id)
+        author TEXT NOT NULL,
+        publisher TEXT,
+        isbn TEXT,
+        page_count INTEGER,
+        language TEXT,
+        publication_year INTEGER,
+        format TEXT,          -- paperback, hardcover, ebook, audiobook
+        genre TEXT,           -- fantasy, sci-fi, non-fiction, etc.
+        added_at DATETIME DEFAULT (datetime('now')),
+        updated_at DATETIME,
+        in_trash INTEGER DEFAULT 0
       );
     `);
 
@@ -65,28 +49,6 @@ export function initializeDatabase() {
         added_at DATETIME DEFAULT (datetime('now')),
         updated_at DATETIME,
         in_trash INTEGER DEFAULT 0
-      );
-    `);
-
-    // Item <-> Collections
-    db.run(`
-      CREATE TABLE IF NOT EXISTS item_collections (
-        item_id INTEGER NOT NULL,
-        collection_id INTEGER NOT NULL,
-        PRIMARY KEY(item_id, collection_id),
-        FOREIGN KEY(item_id) REFERENCES items(id),
-        FOREIGN KEY(collection_id) REFERENCES collections(id)
-      );
-    `);
-
-    // Item <-> Tags
-    db.run(`
-      CREATE TABLE IF NOT EXISTS item_tags (
-        item_id INTEGER NOT NULL,
-        tag_id INTEGER NOT NULL,
-        PRIMARY KEY(item_id, tag_id),
-        FOREIGN KEY(item_id) REFERENCES items(id),
-        FOREIGN KEY(tag_id) REFERENCES tags(id)
       );
     `);
   });

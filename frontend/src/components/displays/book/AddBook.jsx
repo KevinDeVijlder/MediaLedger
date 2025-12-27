@@ -108,6 +108,7 @@ export default function AddBook() {
           display: "flex",
           gap: { xs: 2, md: 4 },
           flexDirection: { xs: "column", md: "row" },
+          alignItems: "stretch", // 👈 key line
         }}
       >
         {/* FORM */}
@@ -243,9 +244,7 @@ export default function AddBook() {
                 type="file"
                 accept="image/*"
                 hidden
-                onChange={(e) =>
-                  setImageFile(e.target.files?.[0] ?? null)
-                }
+                onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
               />
             </Button>
 
@@ -254,7 +253,11 @@ export default function AddBook() {
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {imageFile.name}
                 </Typography>
-                <IconButton size="small" onClick={handleRemoveImage} sx={{ color: ACCENT }}>
+                <IconButton
+                  size="small"
+                  onClick={handleRemoveImage}
+                  sx={{ color: ACCENT }}
+                >
                   <Delete fontSize="small" />
                 </IconButton>
               </>
@@ -292,12 +295,12 @@ export default function AddBook() {
         </Box>
 
         {/* PREVIEW */}
-        <Box sx={{ width: { xs: "100%", md: 560 } }}>
+        <Box sx={{ width: { xs: "100%", md: 360 }, maxWidth: "100%" }}>
           <Box
             sx={{
               position: "relative",
               width: "100%",
-              paddingTop: "100%",
+              paddingTop: "160%",
               borderRadius: 3,
               overflow: "hidden",
               bgcolor: "rgba(2,6,23,0.15)",
@@ -320,7 +323,10 @@ export default function AddBook() {
                   <Typography sx={{ color: "text.secondary" }}>
                     Cover preview
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mt: 1 }}
+                  >
                     Select an image to preview
                   </Typography>
                 </Box>

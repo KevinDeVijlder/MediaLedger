@@ -11,10 +11,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../AppContext";
 
-import PersonIcon from "@mui/icons-material/Person";
-import FactoryIcon from "@mui/icons-material/Factory";
+import CreateIcon from "@mui/icons-material/Create";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import TranslateIcon from "@mui/icons-material/Translate";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 
 export default function Books() {
   const API = "http://localhost:3001";
@@ -113,7 +113,14 @@ function BookCard({ item, api, onClick }) {
       }}
     >
       {/* COVER */}
-      <Box sx={{ width: "100%", paddingTop: "100%", position: "relative", bgcolor: "grey.100" }}>
+      <Box
+        sx={{
+          width: "100%",
+          paddingTop: "160%",
+          position: "relative",
+          bgcolor: "grey.100",
+        }}
+      >
         {item.cover_url ? (
           <Box
             sx={{
@@ -122,6 +129,7 @@ function BookCard({ item, api, onClick }) {
               backgroundImage: `url(${api}/${item.cover_url})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
+              boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.05)",
             }}
           />
         ) : (
@@ -172,13 +180,13 @@ function BookCard({ item, api, onClick }) {
         )}
 
         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-          <PersonIcon sx={{ verticalAlign: "middle", mr: 1 }} />
+          <CreateIcon sx={{ verticalAlign: "middle", mr: 1 }} />
           {item.author}
         </Typography>
 
         {item.publisher && (
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            <FactoryIcon sx={{ verticalAlign: "middle", mr: 1 }} />
+            <LocalLibraryIcon sx={{ verticalAlign: "middle", mr: 1 }} />
             {item.publisher}
           </Typography>
         )}

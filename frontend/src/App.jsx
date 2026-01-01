@@ -12,6 +12,8 @@ import TvShows from "./components/displays/tvshow/tvshows";
 import Games from "./components/displays/game/games";
 import Books from "./components/displays/book/Book";
 import AddBook from "./components/displays/book/AddBook";
+import BookDetail from "./components/displays/book/BookDetail";
+import EditBook from "./components/displays/book/EditBook";
 import Boardgames from "./components/displays/boardgame/Boardgame";
 import AddBoardgame from "./components/displays/boardgame/AddBoardgame";
 import BoardgameDetail from "./components/displays/boardgame/BoardgameDetail";
@@ -51,6 +53,8 @@ export default function App() {
           <Route path="/games" element={<Games />} />
           <Route path="/books" element={<Books />} />
           <Route path="/books/add" element={<AddBook />} />
+          <Route path="/books/:id" element={<BookDetail />} />
+          <Route path="/books/:id/edit" element={<EditBook />} />
           <Route path="/boardgames" element={<Boardgames />} />
           <Route path="/boardgames/add" element={<AddBoardgame />} />
           <Route path="/boardgames/:id" element={<BoardgameDetail />} />

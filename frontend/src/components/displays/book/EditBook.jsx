@@ -6,63 +6,86 @@ import {
   Alert,
   IconButton,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../../../AppContext";
 import Delete from "@mui/icons-material/Delete";
 
-export default function EditBoardgame() {
+export default function EditBook() {
   const { id } = useParams();
   const navigate = useNavigate();
   const API = "http://localhost:3001";
   const { triggerRefresh, notifySuccess } = useApp();
-
   const ACCENT = "#FF6D00";
 
-  const [name, setName] = useState("");
+  // Form fields
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
   const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
   const [publisher, setPublisher] = useState("");
-  const [minPlayers, setMinPlayers] = useState(1);
-  const [maxPlayers, setMaxPlayers] = useState(4);
-  const [avgPlaytime, setAvgPlaytime] = useState(30);
-  const [complexityWeight, setComplexityWeight] = useState(1.0);
-  const [imageFile, setImageFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [isbn, setIsbn] = useState("");
+  const [pageCount, setPageCount] = useState("");
+  const [language, setLanguage] = useState("");
+  const [publicationYear, setPublicationYear] = useState("");
+  const [format, setFormat] = useState("");
+  const [genre, setGenre] = useState("");
+
+  // Image handling
+  const [imageFile, setImageFile] = useState(null); // new uploaded file
+  const [previewUrl, setPreviewUrl] = useState(null); // currently displayed image
+
   const [error, setError] = useState(null);
 
   const fieldSx = {
-    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
-      borderColor: ACCENT,
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: ACCENT,
-    },
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": { borderColor: ACCENT },
+    "& .MuiInputLabel-root.Mui-focused": { color: ACCENT },
   };
 
+  // Fetch existing book
   useEffect(() => {
-    async function load() {
+    const fetchBook = async () => {
       try {
-        const data = await fetch(`${API}/boardgames/${id}`).then((r) =>
-          r.json()
-        );
+        const res = await fetch(`${API}/books/${id}`);
+        if (!res.ok) throw new Error("Book not found");
+        const data = await res.json();
 
-        setName(data.name || "");
+        setTitle(data.title || "");
+        setSubtitle(data.subtitle || "");
         setDescription(data.description || "");
+        setAuthor(data.author || "");
         setPublisher(data.publisher || "");
-        setMinPlayers(data.min_players ?? 1);
-        setMaxPlayers(data.max_players ?? 4);
-        setAvgPlaytime(data.avg_playtime ?? 30);
-        setComplexityWeight(data.complexity_weight ?? 1.0);
+        setIsbn(data.isbn || "");
+        setPageCount(data.page_count || "");
+        setLanguage(data.language || "");
+        setPublicationYear(data.publication_year || "");
+        setFormat(data.format || "");
+        setGenre(data.genre || "");
 
+        // set existing cover image as preview
         if (data.cover_url) {
-          setPreviewUrl(`${API}/${data.cover_url}`);
+          const url = data.cover_url.startsWith("http")
+            ? data.cover_url
+            : `${API}/${data.cover_url}`;
+          setPreviewUrl(url);
         }
-      } catch {
-        setError("Failed to load boardgame");
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load book");
       }
-    }
-    load();
+    };
+    fetchBook();
   }, [id]);
+
+  // Update preview when a new file is selected
+  useEffect(() => {
+    if (!imageFile) return;
+
+    const url = URL.createObjectURL(imageFile);
+    setPreviewUrl(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [imageFile]);
 
   const handleRemoveImage = () => {
     setImageFile(null);
@@ -73,35 +96,44 @@ export default function EditBoardgame() {
     e.preventDefault();
     setError(null);
 
+    if (!title) return setError("Title is required.");
+    if (!author) return setError("Author is required.");
+
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("title", title);
+    formData.append("subtitle", subtitle);
     formData.append("description", description);
+    formData.append("author", author);
     formData.append("publisher", publisher);
-    formData.append("min_players", minPlayers);
-    formData.append("max_players", maxPlayers);
-    formData.append("avg_playtime", avgPlaytime);
-    formData.append("complexity_weight", complexityWeight);
+    formData.append("isbn", isbn);
+    formData.append("page_count", pageCount);
+    formData.append("language", language);
+    formData.append("publication_year", publicationYear);
+    formData.append("format", format);
+    formData.append("genre", genre);
+
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const res = await fetch(`${API}/boardgames/${id}`, {
+      const res = await fetch(`${API}/books/${id}`, {
         method: "PUT",
         body: formData,
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error("Update failed");
 
       triggerRefresh();
-      notifySuccess("Boardgame updated");
-      navigate(`/boardgames/${id}`);
-    } catch {
-      setError("Failed to update boardgame");
+      notifySuccess("Book updated");
+      navigate(`/books/${id}`);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update book");
     }
   };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1300, mx: "auto" }}>
       <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-        Edit Boardgame
+        Edit Book
       </Typography>
 
       {error && (
@@ -115,6 +147,7 @@ export default function EditBoardgame() {
           display: "flex",
           gap: { xs: 2, md: 4 },
           flexDirection: { xs: "column", md: "row" },
+          alignItems: "stretch",
         }}
       >
         {/* FORM */}
@@ -127,29 +160,42 @@ export default function EditBoardgame() {
             p: 3,
             borderRadius: 3,
             boxShadow: "0 8px 22px rgba(2,6,23,0.10)",
-            overflow: "hidden",
           }}
         >
           <TextField
             fullWidth
-            label="Name"
+            label="Title"
             size="small"
             sx={{ mb: 2, ...fieldSx }}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
-
+          <TextField
+            fullWidth
+            label="Subtitle"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={subtitle}
+            onChange={(e) => setSubtitle(e.target.value)}
+          />
           <TextField
             fullWidth
             multiline
-            rows={9}
+            rows={6}
             label="Description"
             size="small"
             sx={{ mb: 2, ...fieldSx }}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-
+          <TextField
+            fullWidth
+            label="Author"
+            size="small"
+            sx={{ mb: 2, ...fieldSx }}
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
           <TextField
             fullWidth
             label="Publisher"
@@ -161,40 +207,55 @@ export default function EditBoardgame() {
 
           <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
             <TextField
-              type="number"
-              label="Min players"
+              label="ISBN"
               size="small"
-              sx={{ flex: "1 1 100px", ...fieldSx }}
-              value={minPlayers}
-              onChange={(e) => setMinPlayers(e.target.value)}
+              sx={{ flex: "1 1 160px", ...fieldSx }}
+              value={isbn}
+              onChange={(e) => setIsbn(e.target.value)}
             />
             <TextField
               type="number"
-              label="Max players"
+              label="Pages"
               size="small"
-              sx={{ flex: "1 1 100px", ...fieldSx }}
-              value={maxPlayers}
-              onChange={(e) => setMaxPlayers(e.target.value)}
+              sx={{ flex: "1 1 120px", ...fieldSx }}
+              value={pageCount}
+              onChange={(e) => setPageCount(e.target.value)}
             />
             <TextField
-              type="number"
-              label="Avg playtime (mins)"
+              label="Language"
               size="small"
               sx={{ flex: "1 1 140px", ...fieldSx }}
-              value={avgPlaytime}
-              onChange={(e) => setAvgPlaytime(e.target.value)}
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
             />
             <TextField
               type="number"
-              label="Complexity"
+              label="Year"
               size="small"
-              sx={{ flex: "1 1 110px", ...fieldSx }}
-              value={complexityWeight}
-              onChange={(e) => setComplexityWeight(e.target.value)}
+              sx={{ flex: "1 1 120px", ...fieldSx }}
+              value={publicationYear}
+              onChange={(e) => setPublicationYear(e.target.value)}
             />
           </Box>
 
-          {/* UPLOAD + REMOVE */}
+          <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+            <TextField
+              label="Format"
+              size="small"
+              sx={{ flex: "1 1 200px", ...fieldSx }}
+              value={format}
+              onChange={(e) => setFormat(e.target.value)}
+            />
+            <TextField
+              label="Genre"
+              size="small"
+              sx={{ flex: "1 1 200px", ...fieldSx }}
+              value={genre}
+              onChange={(e) => setGenre(e.target.value)}
+            />
+          </Box>
+
+          {/* IMAGE UPLOAD */}
           <Box
             sx={{
               display: "flex",
@@ -243,7 +304,7 @@ export default function EditBoardgame() {
                 color: "#fff",
               }}
             >
-              Save Changes
+              Update Book
             </Button>
 
             <Button
@@ -265,12 +326,12 @@ export default function EditBoardgame() {
         </Box>
 
         {/* PREVIEW */}
-        <Box sx={{ width: { xs: "100%", md: 560 } }}>
+        <Box sx={{ width: { xs: "100%", md: 360 }, maxWidth: "100%" }}>
           <Box
             sx={{
               position: "relative",
               width: "100%",
-              paddingTop: "100%",
+              paddingTop: "160%",
               borderRadius: 3,
               overflow: "hidden",
               bgcolor: "rgba(2,6,23,0.15)",
@@ -295,10 +356,7 @@ export default function EditBoardgame() {
                   </Typography>
                   <Typography
                     variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      mt: 1,
-                    }}
+                    sx={{ color: "text.secondary", mt: 1 }}
                   >
                     Upload a new image to replace
                   </Typography>

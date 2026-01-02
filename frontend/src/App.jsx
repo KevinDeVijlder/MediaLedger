@@ -9,7 +9,10 @@ import CollectionDetail from "./components/collection/CollectionDetail";
 import Configuration from "./components/configuration";
 import Movies from "./components/displays/movie/movies";
 import TvShows from "./components/displays/tvshow/tvshows";
-import Games from "./components/displays/game/games";
+import Videogames from "./components/displays/videogame/Videogame";
+import AddVideogame from "./components/displays/videogame/AddVideogame";
+// import VideogameDetail from "./components/displays/videogame/VideogameDetail";
+// import EditVideogame from "./components/displays/videogame/EditVideogame";
 import Books from "./components/displays/book/Book";
 import AddBook from "./components/displays/book/AddBook";
 import BookDetail from "./components/displays/book/BookDetail";
@@ -50,7 +53,8 @@ export default function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/tvshows" element={<TvShows />} />
-          <Route path="/games" element={<Games />} />
+          <Route path="/videogames" element={<Videogames />} />
+          <Route path="/videogames/add" element={<AddVideogame />} />
           <Route path="/books" element={<Books />} />
           <Route path="/books/add" element={<AddBook />} />
           <Route path="/books/:id" element={<BookDetail />} />

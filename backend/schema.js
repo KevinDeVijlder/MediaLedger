@@ -12,6 +12,28 @@ export function initializeDatabase() {
       );
     `);
 
+    //Videogames
+    db.run(`
+      CREATE TABLE IF NOT EXISTS videogames (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        cover_url TEXT,
+        developer TEXT,
+        publisher TEXT,
+        release_year INTEGER,
+        platform TEXT,          
+        genre TEXT,             
+        mode TEXT,              
+        rating REAL,
+        ownership_type TEXT,
+        status TEXT,           
+        added_at DATETIME DEFAULT (datetime('now')),
+        updated_at DATETIME,
+        in_trash INTEGER DEFAULT 0
+      );
+    `);
+
     // Books
     db.run(`
       CREATE TABLE IF NOT EXISTS books (

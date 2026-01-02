@@ -6,6 +6,7 @@ import { initializeDatabase } from "./schema.js";
 import collectionsRouter from "./routes/collections.js";
 import boardgamesRouter from "./routes/boardgames.js";
 import booksRouter from "./routes/books.js";
+import videogamesRouter from "./routes/videogames.js";
 
 
 
@@ -18,6 +19,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/collections", collectionsRouter);
 app.use("/boardgames", boardgamesRouter);
 app.use("/books", booksRouter);
+app.use("/videogames", videogamesRouter);
 // initialize DB schema
 initializeDatabase();
 

@@ -26,7 +26,7 @@ const navItems = [
   { label: "Dashboard", icon: <DashboardIcon />, path: "/" },
   { label: "Movies", icon: <LocalMovies />, path: "/movies" },
   { label: "TV Shows", icon: <Tv />, path: "/tvshows" },
-  { label: "Games", icon: <SportsEsports />, path: "/games" },
+  { label: "Videogames", icon: <SportsEsports />, path: "/videogames" },
   { label: "Books", icon: <MenuBook />, path: "/books" },
   { label: "Boardgames", icon: <Casino />, path: "/boardgames" },
   {label: "Collections", icon: <CollectionsIcon />, path: "/collection" },
